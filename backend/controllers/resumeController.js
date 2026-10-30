@@ -64,12 +64,12 @@ const downloadResume = async (req, res) => {
         });
 
         res.set({
-    "Content-Type": "application/pdf",
-    "Content-Length": String(resume.fileSize),
-    "Content-Disposition": 'attachment; filename="resume.pdf"',
-    "Cache-Control": "no-store",
-    "X-Content-Type-Options": "nosniff"
-});
+            "Content-Type": "application/pdf",
+            "Content-Length": String(resume.fileSize),
+            "Content-Disposition": 'attachment; filename="resume.pdf"',
+            "Cache-Control": "no-store",
+            "X-Content-Type-Options": "nosniff"
+        });
 
         downloadStream.pipe(res);
     } catch (error) {
@@ -89,18 +89,18 @@ const uploadResume = async (req, res) => {
         });
     }
 
-if (
-    !Buffer.isBuffer(req.file.buffer) ||
-    req.file.buffer.length === 0 ||
-    req.file.buffer.subarray(0, 5).toString("ascii") !== "%PDF-"
-) {
-    return res.status(400).json({
-        success: false,
-        message: "The uploaded file is not a valid PDF."
-    });
-}
+    if (
+        !Buffer.isBuffer(req.file.buffer) ||
+        req.file.buffer.length === 0 ||
+        req.file.buffer.subarray(0, 5).toString("ascii") !== "%PDF-"
+    ) {
+        return res.status(400).json({
+            success: false,
+            message: "The uploaded file is not a valid PDF."
+        });
+    }
 
-const safeFilename = "resume.pdf";
+    const safeFilename = "resume.pdf";
     const uploadedAt = new Date();
     let uploadedFileId;
 
@@ -124,12 +124,12 @@ const safeFilename = "resume.pdf";
                 gridFsId: uploadedFileId,
                 uploadedAt
             },
-          {
-    returnDocument: "before",
-    upsert: true,
-    runValidators: true,
-    setDefaultsOnInsert: true
-}
+            {
+                returnDocument: "before",
+                upsert: true,
+                runValidators: true,
+                setDefaultsOnInsert: true
+            }
         );
 
         let previousFileCleanupWarning;

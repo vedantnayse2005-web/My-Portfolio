@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import API_BASE_URL from "../config/api";
 import "./Projects.css";
 
 function Projects() {
@@ -9,7 +10,7 @@ function Projects() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/projects");
+        const response = await fetch(`${API_BASE_URL}/api/projects`);
         const result = await response.json();
 
         if (!response.ok) {
@@ -55,7 +56,7 @@ function Projects() {
                 <img
                   className="project-image"
                   src={project.imageFileId
-                    ? `http://localhost:5000/api/projects/${project._id}/image`
+                    ? `${API_BASE_URL}/api/projects/${project._id}/image`
                     : project.imageUrl}
                   alt={`${project.title} project`}
                   loading="lazy"

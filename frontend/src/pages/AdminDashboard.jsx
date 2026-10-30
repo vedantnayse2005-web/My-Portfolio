@@ -1,6 +1,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "../config/api";
 import "./AdminDashboard.css";
 
 function AdminDashboard() {
@@ -40,7 +41,7 @@ function AdminDashboard() {
     const fetchContacts = useCallback(async () => {
         try {
             const response = await fetch(
-                "http://localhost:5000/api/contact",
+                `${API_BASE_URL}/api/contact`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -71,7 +72,7 @@ function AdminDashboard() {
 
     const fetchProjects = useCallback(async () => {
         try {
-            const response = await fetch("http://localhost:5000/api/projects");
+            const response = await fetch(`${API_BASE_URL}/api/projects`);
             const result = await response.json();
 
             if (!response.ok) {
@@ -88,7 +89,7 @@ function AdminDashboard() {
 
     const fetchResumeStatus = useCallback(async () => {
         try {
-            const response = await fetch("http://localhost:5000/api/resume/status", {
+            const response = await fetch(`${API_BASE_URL}/api/resume/status`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -151,7 +152,7 @@ function AdminDashboard() {
             setDeletingId(id);
 
             const response = await fetch(
-                `http://localhost:5000/api/contact/${id}`,
+                `${API_BASE_URL}/api/contact/${id}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -182,7 +183,7 @@ function AdminDashboard() {
     const handleReadToggle = async (id, currentStatus) => {
         try {
             const response = await fetch(
-                `http://localhost:5000/api/contact/${id}/read`,
+                `${API_BASE_URL}/api/contact/${id}/read`,
                 {
                     method: "PATCH",
                     headers: {
@@ -347,8 +348,8 @@ function AdminDashboard() {
 
             const response = await fetch(
                 isEditing
-                    ? `http://localhost:5000/api/projects/${editingProjectId}`
-                    : "http://localhost:5000/api/projects",
+                    ? `${API_BASE_URL}/api/projects/${editingProjectId}`
+                    : `${API_BASE_URL}/api/projects`,
                 {
                     method: isEditing ? "PUT" : "POST",
                     headers: {
@@ -411,7 +412,7 @@ function AdminDashboard() {
         try {
             setDeletingProjectId(id);
             const response = await fetch(
-                `http://localhost:5000/api/projects/${id}`,
+                `${API_BASE_URL}/api/projects/${id}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -484,7 +485,7 @@ function AdminDashboard() {
         formData.append("resume", resumeFile);
 
         try {
-            const response = await fetch("http://localhost:5000/api/resume", {
+            const response = await fetch(`${API_BASE_URL}/api/resume`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`

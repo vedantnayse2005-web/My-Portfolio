@@ -1,3 +1,4 @@
+import API_BASE_URL from "../config/api";
 import "./Hero.css";
 
 function Hero() {
@@ -31,7 +32,7 @@ function Hero() {
             Explore My Work <span>↗</span>
           </a>
 
-          <a href="http://localhost:5000/api/resume" className="secondary-btn">
+          <a href={`${API_BASE_URL}/api/resume`} className="secondary-btn">
             Download Resume <span>↓</span>
           </a>
         </div>

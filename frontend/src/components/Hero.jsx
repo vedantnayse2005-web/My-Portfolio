@@ -1,3 +1,4 @@
+
 import API_BASE_URL from "../config/api";
 import "./Hero.css";
 
@@ -11,7 +12,18 @@ function Hero() {
           AVAILABLE FOR OPPORTUNITIES
         </div>
 
-        <p className="hero-greeting">Hello, I'm <span>VEDANT NAYSE</span></p>
+        <p className="hero-greeting">
+          Hello, I'm <span>VEDANT NAYSE</span>
+        </p>
+
+        {/* Profile Photo */}
+        <div className="hero-profile">
+          <img
+            src="/profile.jpg"
+            alt="Vedant Nayse"
+            className="hero-profile-image"
+          />
+        </div>
 
         <h1>
           Building digital
@@ -39,10 +51,20 @@ function Hero() {
 
         <div className="social-links">
           <span>CONNECT WITH ME</span>
-          <a href="https://github.com/vedantnayse2005-web" target="_blank" rel="noreferrer">
+
+          <a
+            href="https://github.com/vedantnayse2005-web"
+            target="_blank"
+            rel="noreferrer"
+          >
             GitHub ↗
           </a>
-          <a href="https://www.linkedin.com/in/vedant-nayse/" target="_blank" rel="noreferrer">
+
+          <a
+            href="https://www.linkedin.com/in/vedant-nayse/"
+            target="_blank"
+            rel="noreferrer"
+          >
             LinkedIn ↗
           </a>
         </div>
@@ -64,29 +86,41 @@ function Hero() {
           </div>
 
           <div className="code-content">
-            <p><span className="code-purple">const</span> developer = {"{"}</p>
+            <p>
+              <span className="code-purple">const</span> developer = {"{"}
+            </p>
+
             <p className="indent">
               name: <span className="code-green">"Vedant Nayse"</span>,
             </p>
+
             <p className="indent">
               role: <span className="code-green">"Full Stack Developer"</span>,
             </p>
-            <p className="indent">
-              skills: [
-            </p>
+
+            <p className="indent">skills: [</p>
+
             <p className="indent double">
               <span className="code-orange">"React"</span>,
               <span className="code-orange"> "Node.js"</span>,
             </p>
+
             <p className="indent double">
               <span className="code-orange">"JavaScript"</span>
             </p>
+
             <p className="indent">],</p>
+
             <p className="indent">
               passion: <span className="code-green">"Building ideas"</span>
             </p>
+
             <p>{"}"}</p>
-            <p className="code-comment">// Let's build something great.</p>
+
+            <p className="code-comment">
+              // Let's build something great.
+            </p>
+
             <p className="terminal-cursor">▌</p>
           </div>
         </div>
@@ -106,4 +140,5 @@ function Hero() {
     </main>
   );
 }
+
 export default Hero;

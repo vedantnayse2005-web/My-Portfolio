@@ -1,4 +1,4 @@
-const path = require("path");
+
 const { Readable } = require("stream");
 const mongoose = require("mongoose");
 const Resume = require("../models/Resume");
@@ -63,10 +63,14 @@ const downloadResume = async (req, res) => {
             });
         });
 
-        res.set("Content-Type", resume.contentType);
-        res.set("Content-Length", String(resume.fileSize));
-        res.set("Cache-Control", "no-store");
-        res.attachment(resume.filename);
+        res.set({
+    "Content-Type": "application/pdf",
+    "Content-Length": String(resume.fileSize),
+    "Content-Disposition": 'attachment; filename="resume.pdf"',
+    "Cache-Control": "no-store",
+    "X-Content-Type-Options": "nosniff"
+});
+
         downloadStream.pipe(res);
     } catch (error) {
         console.error("Download Resume Error:", error.message);
@@ -85,19 +89,18 @@ const uploadResume = async (req, res) => {
         });
     }
 
-    if (req.file.buffer.subarray(0, 5).toString("ascii") !== "%PDF-") {
-        return res.status(400).json({
-            success: false,
-            message: "The uploaded file is not a valid PDF."
-        });
-    }
+if (
+    !Buffer.isBuffer(req.file.buffer) ||
+    req.file.buffer.length === 0 ||
+    req.file.buffer.subarray(0, 5).toString("ascii") !== "%PDF-"
+) {
+    return res.status(400).json({
+        success: false,
+        message: "The uploaded file is not a valid PDF."
+    });
+}
 
-    const filename = path
-        .basename(req.file.originalname.replace(/\\/g, "/"))
-        .replace(/[^\w.-]/g, "_");
-    const safeFilename = filename.toLowerCase().endsWith(".pdf")
-        ? filename
-        : "resume.pdf";
+const safeFilename = "resume.pdf";
     const uploadedAt = new Date();
     let uploadedFileId;
 
@@ -121,12 +124,12 @@ const uploadResume = async (req, res) => {
                 gridFsId: uploadedFileId,
                 uploadedAt
             },
-            {
-                new: false,
-                upsert: true,
-                runValidators: true,
-                setDefaultsOnInsert: true
-            }
+          {
+    returnDocument: "before",
+    upsert: true,
+    runValidators: true,
+    setDefaultsOnInsert: true
+}
         );
 
         let previousFileCleanupWarning;

@@ -51,12 +51,17 @@ function Projects() {
         <div className="projects-grid">
           {projects.map((project, index) => (
             <article className="project-card" key={project._id}>
-              {project.imageUrl && (
+              {(project.imageFileId || project.imageUrl) && (
                 <img
                   className="project-image"
-                  src={project.imageUrl}
+                  src={project.imageFileId
+                    ? `http://localhost:5000/api/projects/${project._id}/image`
+                    : project.imageUrl}
                   alt={`${project.title} project`}
                   loading="lazy"
+                  onError={(event) => {
+                    event.currentTarget.hidden = true;
+                  }}
                 />
               )}
               <div className="project-top">

@@ -7,6 +7,7 @@ const connectDB = require("./config/db");
 
 const contactRoutes = require("./routes/contactRoutes");
 const authRoutes = require("./routes/authRoutes");
+const projectRoutes = require("./routes/projectRoutes");
 const protectAdmin = require("./middleware/authMiddleware");
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(express.json());
 // API Routes
 app.use("/api/contact", contactRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/projects", projectRoutes);
 
 //  Admin Dashboard
 

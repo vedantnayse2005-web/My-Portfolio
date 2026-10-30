@@ -1,40 +1,32 @@
-
+import { useEffect, useState } from "react";
 import "./Projects.css";
 
-const projects = [
-  {
-    number: "01",
-    name: "MelodyStream",
-    category: "MUSIC STREAMING WEB APPLICATION",
-    description:
-      "A responsive music streaming interface inspired by modern music platforms, featuring dynamic UI elements and interactive playback controls.",
-    technologies: ["HTML", "CSS", "JavaScript"],
-    github: "https://github.com/your-username/MelodyStream",
-    demo: "",
-  },
-  {
-    number: "02",
-    name: "TaskFlow",
-    category: "TASK MANAGEMENT SYSTEM",
-    description:
-      "An API-based task management application with CRUD functionality, database integration, and organized backend workflows.",
-    technologies: ["Node.js", "Express.js", "REST API", "MongoDB"],
-    github: "https://github.com/your-username/TaskFlow",
-    demo: "",
-  },
-  {
-    number: "03",
-    name: "Wanderlust",
-    category: "TRAVEL LISTING WEB APPLICATION",
-    description:
-      "A travel listing application built with Node.js, Express, MongoDB, and EJS, featuring listing management and image integration.",
-    technologies: ["Node.js", "Express.js", "MongoDB", "EJS"],
-    github: "https://github.com/vedantnayse2005-web/Wanderlust",
-    demo: "",
-  },
-];
-
 function Projects() {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/projects");
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || "Unable to load projects.");
+        }
+
+        setProjects(result.data || []);
+      } catch (fetchError) {
+        setError(fetchError.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
   return (
     <section id="projects" className="projects-section">
       <div className="projects-heading">
@@ -49,38 +41,56 @@ function Projects() {
         </p>
       </div>
 
-      <div className="projects-grid">
-        {projects.map((project) => (
-          <article className="project-card" key={project.number}>
-            <div className="project-top">
-              <span>{project.number} / PROJECT</span>
-              <span className="project-arrow">↗</span>
-            </div>
+      {loading && <p className="projects-status">Loading projects...</p>}
+      {error && <p className="projects-status" role="alert">{error}</p>}
+      {!loading && !error && projects.length === 0 && (
+        <p className="projects-status">Projects will appear here soon.</p>
+      )}
 
-            <span className="project-category">{project.category}</span>
-            <h3>{project.name}</h3>
-            <p className="project-description">{project.description}</p>
-
-            <div className="project-tags">
-              {project.technologies.map((technology) => (
-                <span key={technology}>{technology}</span>
-              ))}
-            </div>
-
-            <div className="project-links">
-              <a href={project.github} target="_blank" rel="noreferrer">
-                GitHub ↗
-              </a>
-
-              {project.demo && (
-                <a href={project.demo} target="_blank" rel="noreferrer">
-                  Live Demo ↗
-                </a>
+      {!loading && !error && projects.length > 0 && (
+        <div className="projects-grid">
+          {projects.map((project, index) => (
+            <article className="project-card" key={project._id}>
+              {project.imageUrl && (
+                <img
+                  className="project-image"
+                  src={project.imageUrl}
+                  alt={`${project.title} project`}
+                  loading="lazy"
+                />
               )}
-            </div>
-          </article>
-        ))}
-      </div>
+              <div className="project-top">
+                <span>{String(index + 1).padStart(2, "0")} / PROJECT</span>
+                <span className="project-arrow">↗</span>
+              </div>
+
+              <h3>{project.title}</h3>
+              <p className="project-description">{project.description}</p>
+
+              <div className="project-tags">
+                {(project.technologies || []).map((technology) => (
+                  <span key={technology}>{technology}</span>
+                ))}
+              </div>
+
+              {(project.githubLink || project.liveDemoLink) && (
+                <div className="project-links">
+                  {project.githubLink && (
+                    <a href={project.githubLink} target="_blank" rel="noreferrer">
+                      GitHub ↗
+                    </a>
+                  )}
+                  {project.liveDemoLink && (
+                    <a href={project.liveDemoLink} target="_blank" rel="noreferrer">
+                      Live Demo ↗
+                    </a>
+                  )}
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

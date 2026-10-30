@@ -46,6 +46,14 @@
   transition: 0.3s ease;
 }
 
+.project-image {
+  width: 100%;
+  max-height: 210px;
+  margin-bottom: 24px;
+  object-fit: cover;
+  border-radius: 7px;
+}
+
 .project-card:hover {
   transform: translateY(-6px);
   border-color: #a8ff35;
@@ -115,6 +123,11 @@
 
 .project-links a:hover {
   color: white;
+}
+
+.projects-status {
+  color: #999f95;
+  line-height: 1.8;
 }
 
 @media (max-width: 1000px) {

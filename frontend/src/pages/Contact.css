@@ -1,0 +1,144 @@
+
+.contact-section {
+  width: min(1600px, 94%);
+  margin: 0 auto;
+  padding: 130px 0;
+  border-bottom: 1px solid #20251b;
+}
+
+.contact-heading {
+  max-width: 850px;
+  margin-bottom: 65px;
+}
+
+.contact-heading h2 {
+  font-size: clamp(42px, 5vw, 72px);
+  line-height: 1.1;
+  margin-top: 22px;
+  letter-spacing: -2px;
+}
+
+.contact-heading h2 span {
+  color: #a8ff35;
+}
+
+.contact-heading > p {
+  color: #999f95;
+  font-size: 16px;
+  line-height: 1.8;
+  margin-top: 22px;
+}
+
+.contact-content {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 100px;
+}
+
+.contact-info h3 {
+  font-size: 25px;
+  margin-bottom: 18px;
+}
+
+.contact-info > p {
+  color: #999f95;
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+.contact-email {
+  display: inline-block;
+  color: #a8ff35;
+  font-size: 16px;
+  text-decoration: none;
+  margin-bottom: 35px;
+}
+
+.contact-socials {
+  display: flex;
+  gap: 25px;
+}
+
+.contact-socials a {
+  color: #b7beb2;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.contact-socials a:hover {
+  color: #a8ff35;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 30px;
+  background: #0d110d;
+  border: 1px solid #252d20;
+  border-radius: 12px;
+}
+
+.contact-form label {
+  color: #a8ff35;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-top: 10px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 14px;
+  color: white;
+  background: #080b08;
+  border: 1px solid #30392b;
+  border-radius: 5px;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  resize: vertical;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #a8ff35;
+}
+
+.contact-form button {
+  padding: 15px;
+  margin-top: 15px;
+  color: #080b08;
+  background: #a8ff35;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.contact-form button:hover {
+  background: white;
+}
+
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 85px 0;
+  }
+
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+
+  .contact-form {
+    padding: 22px;
+  }
+
+  .contact-heading h2 {
+    letter-spacing: -1px;
+  }
+}

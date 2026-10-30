@@ -1,0 +1,138 @@
+
+.projects-section {
+  width: min(1600px, 94%);
+  margin: 0 auto;
+  padding: 130px 0;
+  border-bottom: 1px solid #20251b;
+}
+
+.projects-heading {
+  max-width: 850px;
+  margin-bottom: 65px;
+}
+
+.projects-heading h2 {
+  font-size: clamp(42px, 5vw, 72px);
+  line-height: 1.1;
+  margin-top: 22px;
+  letter-spacing: -2px;
+}
+
+.projects-heading h2 span {
+  color: #a8ff35;
+}
+
+.projects-heading p {
+  color: #999f95;
+  font-size: 16px;
+  line-height: 1.8;
+  margin-top: 22px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 390px;
+  padding: 30px;
+  background: #0d110d;
+  border: 1px solid #252d20;
+  border-radius: 12px;
+  transition: 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-6px);
+  border-color: #a8ff35;
+}
+
+.project-top {
+  display: flex;
+  justify-content: space-between;
+  color: #a8ff35;
+  font-size: 12px;
+  margin-bottom: 38px;
+}
+
+.project-arrow {
+  font-size: 20px;
+}
+
+.project-category {
+  color: #a8ff35;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  margin-bottom: 14px;
+}
+
+.project-card h3 {
+  font-size: 27px;
+  margin-bottom: 15px;
+}
+
+.project-description {
+  color: #999f95;
+  font-size: 14px;
+  line-height: 1.8;
+  margin-bottom: 25px;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-bottom: 28px;
+}
+
+.project-tags span {
+  padding: 7px 11px;
+  border: 1px solid #30392b;
+  border-radius: 5px;
+  color: #b7beb2;
+  font-size: 12px;
+}
+
+.project-links {
+  display: flex;
+  gap: 22px;
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid #252d20;
+}
+
+.project-links a {
+  color: #a8ff35;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.project-links a:hover {
+  color: white;
+}
+
+@media (max-width: 1000px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .projects-section {
+    padding: 85px 0;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .projects-heading h2 {
+    letter-spacing: -1px;
+  }
+}

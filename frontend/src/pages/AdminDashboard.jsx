@@ -17,6 +17,12 @@ function AdminDashboard() {
     const [savingProject, setSavingProject] = useState(false);
     const [deletingProjectId, setDeletingProjectId] = useState(null);
     const [editingProjectId, setEditingProjectId] = useState(null);
+    const [resume, setResume] = useState(null);
+    const [resumeLoading, setResumeLoading] = useState(true);
+    const [resumeError, setResumeError] = useState("");
+    const [resumeFile, setResumeFile] = useState(null);
+    const [resumeUploadStatus, setResumeUploadStatus] = useState("");
+    const [uploadingResume, setUploadingResume] = useState(false);
     const [projectForm, setProjectForm] = useState({
         title: "",
         description: "",
@@ -78,6 +84,33 @@ function AdminDashboard() {
         }
     }, []);
 
+    const fetchResumeStatus = useCallback(async () => {
+        try {
+            const response = await fetch("http://localhost:5000/api/resume/status", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const result = await response.json();
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    sessionStorage.removeItem("adminToken");
+                    navigate("/admin/login");
+                    return;
+                }
+
+                throw new Error(result.message || "Unable to fetch resume status.");
+            }
+
+            setResume(result.data);
+        } catch (fetchError) {
+            setResumeError(fetchError.message);
+        } finally {
+            setResumeLoading(false);
+        }
+    }, [navigate, token]);
+
     useEffect(() => {
         if (!token) {
             navigate("/admin/login");
@@ -89,13 +122,14 @@ function AdminDashboard() {
             if (isActive) {
                 fetchContacts();
                 fetchProjects();
+                fetchResumeStatus();
             }
         });
 
         return () => {
             isActive = false;
         };
-    }, [token, navigate, fetchContacts, fetchProjects]);
+    }, [token, navigate, fetchContacts, fetchProjects, fetchResumeStatus]);
 
     // Logout
     const handleLogout = () => {
@@ -303,6 +337,78 @@ function AdminDashboard() {
         }
     };
 
+    const handleResumeFileChange = (event) => {
+        const selectedFile = event.target.files?.[0] || null;
+        setResumeUploadStatus("");
+
+        if (
+            selectedFile &&
+            (
+                selectedFile.type !== "application/pdf" ||
+                !selectedFile.name.toLowerCase().endsWith(".pdf")
+            )
+        ) {
+            setResumeFile(null);
+            setResumeUploadStatus("Only PDF files are accepted.");
+            event.target.value = "";
+            return;
+        }
+
+        if (selectedFile && selectedFile.size > 5 * 1024 * 1024) {
+            setResumeFile(null);
+            setResumeUploadStatus("Resume must be 5 MB or smaller.");
+            event.target.value = "";
+            return;
+        }
+
+        setResumeFile(selectedFile);
+    };
+
+    const handleResumeUpload = async (event) => {
+        event.preventDefault();
+        if (!resumeFile) {
+            setResumeUploadStatus("Choose a PDF file to upload.");
+            return;
+        }
+
+        setUploadingResume(true);
+        setResumeUploadStatus("");
+        setResumeError("");
+
+        const formData = new FormData();
+        formData.append("resume", resumeFile);
+
+        try {
+            const response = await fetch("http://localhost:5000/api/resume", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                body: formData
+            });
+            const result = await response.json();
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    sessionStorage.removeItem("adminToken");
+                    navigate("/admin/login");
+                    return;
+                }
+
+                throw new Error(result.message || "Unable to upload resume.");
+            }
+
+            setResume(result.data);
+            setResumeFile(null);
+            setResumeUploadStatus(result.warning || "Resume uploaded successfully.");
+            event.target.reset();
+        } catch (uploadError) {
+            setResumeUploadStatus(uploadError.message);
+        } finally {
+            setUploadingResume(false);
+        }
+    };
+
     return (
         <div className="admin-dashboard">
 
@@ -315,6 +421,7 @@ function AdminDashboard() {
                 <nav>
                     <a href="#overview">Overview</a>
                     <a href="#projects">Projects</a>
+                    <a href="#resume">Resume</a>
                     <a href="#messages">Messages</a>
                 </nav>
 
@@ -340,8 +447,11 @@ function AdminDashboard() {
                             setError("");
                             setProjectsLoading(true);
                             setProjectsError("");
+                            setResumeLoading(true);
+                            setResumeError("");
                             fetchContacts();
                             fetchProjects();
+                            fetchResumeStatus();
                         }}
                         disabled={loading}
                     >
@@ -508,6 +618,58 @@ function AdminDashboard() {
                             </div>
                         </article>
                     ))}
+                </section>
+
+                <section className="admin-content" id="resume">
+                    <div className="messages-heading">
+                        <h2>Resume Management</h2>
+                        <span>{resume ? "Uploaded" : "Not uploaded"}</span>
+                    </div>
+
+                    {resumeLoading && <p>Loading resume status...</p>}
+                    {resumeError && (
+                        <p className="admin-error" role="alert">{resumeError}</p>
+                    )}
+                    {!resumeLoading && !resumeError && (
+                        <div className="resume-current">
+                            <p>
+                                <strong>Current resume:</strong>{" "}
+                                {resume?.filename || "No resume uploaded"}
+                            </p>
+                            {resume && (
+                                <p>
+                                    <strong>Last uploaded:</strong>{" "}
+                                    {new Date(resume.uploadedAt).toLocaleString()}
+                                </p>
+                            )}
+                        </div>
+                    )}
+
+                    <form className="resume-upload-form" onSubmit={handleResumeUpload}>
+                        <label htmlFor="resume-file">Upload a PDF resume (maximum 5 MB)</label>
+                        <input
+                            id="resume-file"
+                            name="resume"
+                            type="file"
+                            accept=".pdf,application/pdf"
+                            onChange={handleResumeFileChange}
+                        />
+                        {resumeFile && <p>Selected: {resumeFile.name}</p>}
+                        {resumeUploadStatus && (
+                            <p className="resume-upload-status" role="status">
+                                {resumeUploadStatus}
+                            </p>
+                        )}
+                        <button
+                            className="refresh-btn"
+                            type="submit"
+                            disabled={uploadingResume || !resumeFile}
+                        >
+                            {uploadingResume
+                                ? "Uploading..."
+                                : resume ? "Replace Resume" : "Upload Resume"}
+                        </button>
+                    </form>
                 </section>
 
                 {/* Contact Messages */}

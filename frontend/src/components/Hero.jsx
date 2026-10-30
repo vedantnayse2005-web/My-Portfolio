@@ -31,7 +31,7 @@ function Hero() {
             Explore My Work <span>↗</span>
           </a>
 
-          <a href="/resume.pdf" className="secondary-btn" download>
+          <a href="http://localhost:5000/api/resume" className="secondary-btn">
             Download Resume <span>↓</span>
           </a>
         </div>

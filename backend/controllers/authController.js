@@ -15,8 +15,7 @@ const loginAdmin = async (req, res) => {
         }
 
         // Find admin by username
-        const admin = await Admin.findOne({ username });
-
+       const admin = await Admin.findOne({ username }).select("+password");
         if (!admin) {
             return res.status(401).json({
                 success: false,

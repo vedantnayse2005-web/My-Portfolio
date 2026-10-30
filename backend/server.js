@@ -1,6 +1,11 @@
 
 require("dotenv").config();
 
+if (!process.env.JWT_SECRET) {
+    console.error("JWT_SECRET is missing from environment variables.");
+    process.exit(1);
+}
+
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
@@ -15,8 +20,18 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+const allowedOrigins = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(",")
+    : ["http://localhost:5173"];
+
+
+app.use(cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+app.use(express.json({ limit: "10kb" }));
 
 // API Routes
 app.use("/api/contact", contactRoutes);

@@ -23,7 +23,7 @@ const seedSkills = async () => {
                         $setOnInsert: {
                             name,
                             category: group.category,
-                            displayOrder: (index + 1) * 10,
+                            displayOrder: index + 1,
                             isActive: true
                         }
                     },

@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import API_BASE_URL from "../config/api";
+import SkillIcon from "../components/SkillIcon";
 import "./Skills.css";
 
 const skillCategories = [
@@ -42,8 +43,15 @@ function Skills() {
 
   const groups = skillCategories.map((title) => ({
     title,
-    skills: skills.filter((skill) => skill.category === title)
-  })).filter((group) => group.skills.length > 0);
+    skills: skills
+      .filter((skill) => skill.category === title)
+      .sort((first, second) => Number(first.displayOrder) - Number(second.displayOrder)
+        || first.name.localeCompare(second.name)
+        || first._id.localeCompare(second._id))
+  }))
+    .filter((group) => group.skills.length > 0)
+    .sort((first, second) => Number(first.skills[0].displayOrder) - Number(second.skills[0].displayOrder)
+      || first.title.localeCompare(second.title));
 
   return (
     <section id="skills" className="skills-section">
@@ -70,7 +78,7 @@ function Skills() {
           {groups.map((group) => (
             <div className="skill-card" key={group.title}>
               <div className="skill-card-top">
-                <span>{String(skillCategories.indexOf(group.title) + 1).padStart(2, "0")}</span>
+                <span>{group.skills.length} {group.skills.length === 1 ? "SKILL" : "SKILLS"}</span>
                 <span className="skill-arrow">↗</span>
               </div>
 
@@ -79,7 +87,13 @@ function Skills() {
               <div className="skill-tags">
                 {group.skills.map((skill) => (
                   <span className="skill-tag" key={skill._id}>
-                    {skill.icon && <img src={skill.icon} alt="" loading="lazy" />}
+                    <span className="skill-order">{skill.displayOrder ?? 1}</span>
+                    <SkillIcon
+                      key={`${skill._id}-${skill.icon || ""}`}
+                      icon={skill.icon}
+                      name={skill.name}
+                      className="skill-tag-icon"
+                    />
                     <span>{skill.name}</span>
                     {skill.proficiencyLevel && <small>{skill.proficiencyLevel}</small>}
                   </span>

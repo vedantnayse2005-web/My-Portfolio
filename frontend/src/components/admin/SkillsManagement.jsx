@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API_BASE_URL from "../../config/api";
+import SkillIcon from "../SkillIcon";
 import "./SkillsManagement.css";
 
 const categories = [
@@ -16,7 +17,7 @@ const emptySkill = {
     category: categories[0],
     proficiencyLevel: "",
     icon: "",
-    displayOrder: 0,
+    displayOrder: 1,
     isActive: true
 };
 
@@ -182,9 +183,10 @@ function SkillsManagement() {
         .filter((skill) => skill.name.toLowerCase().includes(search.trim().toLowerCase()))
         .filter((skill) => categoryFilter === "All categories" || skill.category === categoryFilter)
         .filter((skill) => statusFilter === "all" || (statusFilter === "active" ? skill.isActive : !skill.isActive))
-        .sort((first, second) => first.category.localeCompare(second.category)
-            || first.displayOrder - second.displayOrder
-            || first.name.localeCompare(second.name));
+        .sort((first, second) => Number(first.displayOrder) - Number(second.displayOrder)
+            || first.category.localeCompare(second.category)
+            || first.name.localeCompare(second.name)
+            || first._id.localeCompare(second._id));
 
     return (
         <section className="admin-content skills-admin-section" id="skills-management">
@@ -223,19 +225,20 @@ function SkillsManagement() {
                     </select>
                 </label>
                 <label>
-                    Icon or logo URL (optional)
+                    Direct icon image URL (optional)
                     <input
                         type="url"
                         value={form.icon}
                         maxLength={2048}
                         onChange={(event) => setForm({ ...form, icon: event.target.value })}
                     />
+                    <small>Use a direct image URL (including SVG, PNG, JPG, or WebP), not an icon gallery page.</small>
                 </label>
                 <label>
                     Display order
                     <input
                         type="number"
-                        min="0"
+                        min="1"
                         max="10000"
                         step="1"
                         value={form.displayOrder}
@@ -293,7 +296,12 @@ function SkillsManagement() {
                 {visibleSkills.map((skill) => (
                     <article className="skills-admin-item" key={skill._id}>
                         <div className="skills-admin-item-details">
-                            {skill.icon && <img src={skill.icon} alt="" loading="lazy" />}
+                            <SkillIcon
+                                key={`${skill._id}-${skill.icon || ""}`}
+                                icon={skill.icon}
+                                name={skill.name}
+                                className="skills-admin-icon"
+                            />
                             <div>
                                 <h3>{skill.name}</h3>
                                 <p>{skill.category} · Order {skill.displayOrder}</p>

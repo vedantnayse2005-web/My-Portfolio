@@ -27,9 +27,9 @@ const normalizeSkill = (data, existing = {}) => {
     if (typeof proficiencyValue !== "string") return null;
     const proficiencyLevel = proficiencyValue.trim();
 
-    const orderValue = data.displayOrder ?? existing.displayOrder ?? 0;
+    const orderValue = data.displayOrder ?? existing.displayOrder ?? 1;
     const displayOrder = typeof orderValue === "number" ? orderValue : Number(orderValue);
-    if (!Number.isInteger(displayOrder) || displayOrder < 0 || displayOrder > 10000) {
+    if (!Number.isInteger(displayOrder) || displayOrder < 1 || displayOrder > 10000) {
         return null;
     }
 
@@ -69,7 +69,7 @@ const normalizeSkill = (data, existing = {}) => {
 const getPublicSkills = async (req, res) => {
     try {
         const skills = await Skill.find({ isActive: true })
-            .sort({ category: 1, displayOrder: 1, name: 1 })
+            .sort({ displayOrder: 1, category: 1, name: 1, _id: 1 })
             .select("name category proficiencyLevel icon displayOrder")
             .lean();
 
@@ -82,7 +82,9 @@ const getPublicSkills = async (req, res) => {
 
 const getAdminSkills = async (req, res) => {
     try {
-        const skills = await Skill.find().sort({ category: 1, displayOrder: 1, name: 1 }).lean();
+        const skills = await Skill.find()
+            .sort({ displayOrder: 1, category: 1, name: 1, _id: 1 })
+            .lean();
         return res.status(200).json({ success: true, data: skills });
     } catch (error) {
         console.error("Fetch Admin Skills Error:", error.message);

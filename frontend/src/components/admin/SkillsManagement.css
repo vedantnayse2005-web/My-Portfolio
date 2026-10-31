@@ -82,10 +82,11 @@
   min-width: 0;
 }
 
-.skills-admin-item-details > img {
+.skills-admin-item-details > .skills-admin-icon {
   width: 36px;
   height: 36px;
-  object-fit: contain;
+  flex: 0 0 36px;
+  font-size: 15px;
 }
 
 .skills-admin-item h3 {

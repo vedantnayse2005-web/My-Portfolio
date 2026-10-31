@@ -31,9 +31,9 @@ const skillSchema = new mongoose.Schema(
         },
         displayOrder: {
             type: Number,
-            min: 0,
+            min: 1,
             max: 10000,
-            default: 0
+            default: 1
         },
         isActive: {
             type: Boolean,

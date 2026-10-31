@@ -83,10 +83,17 @@
   font-size: 13px;
 }
 
-.skill-tag img {
+.skill-tag-icon {
   width: 16px;
   height: 16px;
+  flex: 0 0 16px;
   object-fit: contain;
+}
+
+.skill-order {
+  color: #a8ff35;
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
 }
 
 .skill-tag small {

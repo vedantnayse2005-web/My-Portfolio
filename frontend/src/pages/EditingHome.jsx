@@ -1,34 +1,11 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import API_BASE_URL from "../config/api";
+import { getVideoEmbedUrl, getVideoPlatform, isHostedVideoUrl } from "../utils/editingVideoUrl";
 import "./EditingHome.css";
 
 const EMAIL = "vedantnayse2005@gmail.com";
 const LINKEDIN_URL = "https://www.linkedin.com/in/vedant-nayse/";
-
-const getEmbedUrl = (videoUrl) => {
-  try {
-    const parsedUrl = new URL(videoUrl);
-    if (parsedUrl.hostname === "youtu.be") {
-      return `https://www.youtube-nocookie.com/embed/${parsedUrl.pathname.slice(1)}`;
-    }
-    if (parsedUrl.hostname.endsWith("youtube.com")) {
-      const videoId = parsedUrl.searchParams.get("v");
-      return videoId ? `https://www.youtube-nocookie.com/embed/${videoId}` : "";
-    }
-    if (parsedUrl.hostname.endsWith("vimeo.com")) {
-      const videoId = parsedUrl.pathname.split("/").filter(Boolean).at(-1);
-      return videoId && /^\d+$/.test(videoId)
-        ? `https://player.vimeo.com/video/${videoId}`
-        : "";
-    }
-  } catch {
-    return "";
-  }
-  return "";
-};
-
-const isHostedVideo = (videoUrl) => /\.(mp4|webm|ogg)(\?.*)?$/i.test(videoUrl || "");
 
 function EditingHero({ profile }) {
   return (
@@ -74,9 +51,39 @@ function EditingHero({ profile }) {
   );
 }
 
+function ShowreelEmbed({ videoUrl, title, platform, embedUrl }) {
+  const [embedFailed, setEmbedFailed] = useState(false);
+
+  return (
+    <>
+      <div className={`editing-video-frame ${platform === "instagram" ? "editing-video-frame-instagram" : ""}`}>
+        <iframe
+          src={embedUrl}
+          title={title}
+          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+          onError={() => setEmbedFailed(true)}
+        />
+      </div>
+      <p className="editing-embed-fallback" role={embedFailed ? "status" : undefined}>
+        {embedFailed
+          ? "The embed could not load. The content may be private, deleted, or unavailable. "
+          : platform === "instagram"
+            ? "Instagram may block embeds for private, deleted, or unavailable posts. "
+            : "If the embedded player is unavailable, open the original video. "}
+        <a href={videoUrl} target="_blank" rel="noreferrer">
+          {platform === "instagram" ? "Open original on Instagram ↗" : "Open original video ↗"}
+        </a>
+      </p>
+    </>
+  );
+}
+
 function EditingShowreel({ showreel, loading, error }) {
   const videoUrl = showreel?.videoUrl || "";
-  const embedUrl = getEmbedUrl(videoUrl);
+  const embedUrl = getVideoEmbedUrl(videoUrl);
+  const platform = getVideoPlatform(videoUrl);
 
   return (
     <section className="editing-section editing-showreel" id="editing-showreel">
@@ -89,20 +96,28 @@ function EditingShowreel({ showreel, loading, error }) {
         <p className="editing-data-message" role="status">Loading showreel...</p>
       ) : error ? (
         <p className="editing-data-message editing-data-error" role="alert">{error}</p>
-      ) : videoUrl && isHostedVideo(videoUrl) ? (
+      ) : videoUrl && isHostedVideoUrl(videoUrl) ? (
         <video className="editing-video-player" controls playsInline preload="metadata">
           <source src={videoUrl} />
           Your browser does not support embedded video.
         </video>
       ) : embedUrl ? (
-        <div className="editing-video-frame">
-          <iframe
-            src={embedUrl}
-            title={showreel?.title || "Vedant Nayse editing showreel"}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-            referrerPolicy="strict-origin-when-cross-origin"
-          />
+        <ShowreelEmbed
+          key={videoUrl}
+          videoUrl={videoUrl}
+          title={showreel?.title || "Vedant Nayse editing showreel"}
+          platform={platform}
+          embedUrl={embedUrl}
+        />
+      ) : videoUrl ? (
+        <div className="editing-reel-empty">
+          <div className="editing-reel-mark" aria-hidden="true">VN<span> / REEL</span></div>
+          <div>
+            <p className="editing-eyebrow">EMBED UNAVAILABLE</p>
+            <h3>{showreel?.title || "This video cannot be embedded."}</h3>
+            <p>Open the original video to view it.</p>
+            <a className="editing-original-video-link" href={videoUrl} target="_blank" rel="noreferrer">Open original video ↗</a>
+          </div>
         </div>
       ) : (
         <div className="editing-reel-empty">
@@ -204,11 +219,11 @@ function EditingProjects({ projects, error, loading }) {
       ) : projects.length > 0 ? (
         <div className="editing-project-grid">
           {projects.map((project) => {
-            const embedUrl = getEmbedUrl(project.videoUrl || "");
+            const embedUrl = getVideoEmbedUrl(project.videoUrl || "");
             return (
               <article className="editing-project-card" key={project.id || project.title}>
                 <div className="editing-project-media">
-                  {project.videoUrl && isHostedVideo(project.videoUrl) ? (
+                  {project.videoUrl && isHostedVideoUrl(project.videoUrl) ? (
                     <video controls playsInline preload="metadata" poster={project.thumbnail || undefined}>
                       <source src={project.videoUrl} />
                     </video>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
     editingAdminRequest,
     getVideoEmbedUrl,
+    getVideoPlatform,
     handleEditingAdminError,
     isHostedVideoUrl,
     isValidVideoUrl
@@ -18,6 +19,8 @@ function EditingShowreel() {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
     const [status, setStatus] = useState("");
+    const [previewError, setPreviewError] = useState(false);
+    const [removing, setRemoving] = useState(false);
 
     useEffect(() => {
         let isActive = true;
@@ -46,6 +49,7 @@ function EditingShowreel() {
         setForm((current) => ({ ...current, [name]: type === "checkbox" ? checked : value }));
         setError("");
         setStatus("");
+        setPreviewError(false);
     };
 
     const save = async (event) => {
@@ -53,7 +57,7 @@ function EditingShowreel() {
         setError("");
         setStatus("");
         if (!form.title.trim() || !isValidVideoUrl(form.videoUrl.trim())) {
-            setError("Add a title and a valid YouTube, Vimeo, or hosted video URL.");
+            setError("Add a title and a valid YouTube, Instagram, Vimeo, or hosted video URL.");
             return;
         }
         setSaving(true);
@@ -72,6 +76,30 @@ function EditingShowreel() {
     };
 
     const embedUrl = getVideoEmbedUrl(form.videoUrl);
+    const platform = getVideoPlatform(form.videoUrl);
+    const platformLabel = {
+        youtube: "YouTube video or Short",
+        instagram: "Instagram Reel or video post",
+        vimeo: "Vimeo video",
+        hosted: "Hosted video"
+    }[platform] || "Unsupported URL";
+
+    const removeShowreel = async () => {
+        if (!window.confirm("Remove the configured showreel from the public editing portfolio?")) return;
+        setRemoving(true);
+        setError("");
+        setStatus("");
+        try {
+            const result = await editingAdminRequest("/showreel", token, { method: "DELETE" });
+            setForm(initialForm);
+            setPreviewError(false);
+            setStatus(result.message || "Showreel removed.");
+        } catch (removeError) {
+            if (!handleEditingAdminError(removeError, navigate)) setError(removeError.message);
+        } finally {
+            setRemoving(false);
+        }
+    };
 
     return (
         <section className="editing-admin editing-admin-section" id="editing-showreel-admin">
@@ -85,8 +113,9 @@ function EditingShowreel() {
                     <input name="title" maxLength={160} value={form.title} onChange={updateField} required />
                 </label>
                 <label>
-                    Video URL (YouTube, Vimeo, or hosted video)
+                    Video URL (YouTube, Shorts, Instagram Reel/post, Vimeo, or hosted video)
                     <input name="videoUrl" type="url" maxLength={2048} value={form.videoUrl} onChange={updateField} required />
+                    <small className="editing-admin-platform">Detected: {platformLabel}</small>
                 </label>
                 <label className="editing-admin-wide">
                     Description
@@ -102,17 +131,38 @@ function EditingShowreel() {
                     <button className="editing-admin-button editing-admin-button-primary" type="submit" disabled={saving || loading}>
                         {saving ? "Saving..." : "Save Showreel"}
                     </button>
+                    {(form.title || form.videoUrl) && (
+                        <button className="editing-admin-button editing-admin-button-danger" type="button" onClick={removeShowreel} disabled={removing || saving}>
+                            {removing ? "Removing..." : "Delete Showreel"}
+                        </button>
+                    )}
                 </div>
             </form>
             {form.videoUrl && (
                 <div className="editing-admin-preview">
                     <h3>Video preview</h3>
                     {isHostedVideoUrl(form.videoUrl) ? (
-                        <video controls playsInline preload="metadata"><source src={form.videoUrl} /></video>
+                        <div className="editing-admin-preview-frame">
+                            <video controls playsInline preload="metadata" onError={() => setPreviewError(true)}><source src={form.videoUrl} /></video>
+                        </div>
                     ) : embedUrl ? (
-                        <iframe src={embedUrl} title="Showreel preview" allowFullScreen />
+                        <div className={`editing-admin-preview-frame ${platform === "instagram" ? "editing-admin-preview-instagram" : ""}`}>
+                            <iframe
+                                src={embedUrl}
+                                title="Showreel preview"
+                                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                                allowFullScreen
+                                onError={() => setPreviewError(true)}
+                            />
+                        </div>
                     ) : (
                         <a href={form.videoUrl} target="_blank" rel="noreferrer">Open video URL ↗</a>
+                    )}
+                    {previewError && <p className="editing-admin-embed-fallback" role="status">Preview unavailable. The video may be private, deleted, or block embedding.</p>}
+                    {platform === "instagram" && (
+                        <p className="editing-admin-embed-fallback">
+                            Instagram may block embeds for private, deleted, or unavailable posts. <a href={form.videoUrl} target="_blank" rel="noreferrer">Open original on Instagram ↗</a>
+                        </p>
                     )}
                 </div>
             )}

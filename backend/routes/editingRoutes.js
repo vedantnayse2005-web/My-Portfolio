@@ -47,6 +47,7 @@ router.get("/overview", protectAdmin, editing.getEditingOverview);
 router.get("/showreel", editing.getPublicShowreel);
 router.get("/showreel/admin", protectAdmin, editing.getAdminShowreel);
 router.put("/showreel", protectAdmin, editing.updateShowreel);
+router.delete("/showreel", protectAdmin, editing.deleteShowreel);
 
 router.get("/profile", editing.getPublicProfile);
 router.get("/profile/admin", protectAdmin, editing.getAdminProfile);

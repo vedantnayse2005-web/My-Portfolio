@@ -5,6 +5,7 @@ const EditingProfile = require("../models/EditingProfile");
 const EditingProject = require("../models/EditingProject");
 const EditingShowreel = require("../models/EditingShowreel");
 const EditingSkill = require("../models/EditingSkill");
+const { getEditingVideoPlatform } = require("../utils/editingVideoUrl");
 
 const CURRENT_KEY = "current";
 const THUMBNAIL_BUCKET = "editingThumbnails";
@@ -43,19 +44,7 @@ const validHttpUrl = (value) => {
 };
 
 const validVideoUrl = (value) => {
-    if (!validHttpUrl(value)) return false;
-    const parsed = new URL(value);
-    const host = parsed.hostname.toLowerCase();
-    if (/\.(mp4|webm|ogg)$/i.test(parsed.pathname)) return true;
-    if (host === "youtu.be") return /^[\w-]{6,}$/.test(parsed.pathname.split("/").filter(Boolean)[0] || "");
-    if (host === "youtube.com" || host.endsWith(".youtube.com")) {
-        const videoId = parsed.searchParams.get("v") || parsed.pathname.match(/^\/(?:embed|shorts|live)\/([\w-]{6,})(?:\/|$)/)?.[1];
-        return Boolean(videoId);
-    }
-    if (host === "vimeo.com" || host.endsWith(".vimeo.com")) {
-        return /^\/(?:video\/)?\d+(?:\/|$)/.test(parsed.pathname);
-    }
-    return false;
+    return Boolean(getEditingVideoPlatform(value));
 };
 
 const validateId = (id, res) => {
@@ -421,7 +410,7 @@ const updateShowreel = async (req, res) => {
     const normalizedUrl = typeof videoUrl === "string" ? videoUrl.trim() : "";
     const normalizedEnabled = parseBoolean(enabled);
     if (!normalizedTitle || normalizedTitle.length > 160 || normalizedDescription === null || normalizedDescription.length > 1500 || !validVideoUrl(normalizedUrl) || normalizedEnabled === null) {
-        return res.status(400).json({ success: false, message: "Showreel details are invalid. Use a valid YouTube, Vimeo, or hosted video URL." });
+        return res.status(400).json({ success: false, message: "Showreel details are invalid. Use a YouTube video/Short, Instagram Reel/post, Vimeo, or hosted video URL." });
     }
     try {
         const showreel = await EditingShowreel.findOneAndUpdate({ key: CURRENT_KEY }, {
@@ -435,6 +424,19 @@ const updateShowreel = async (req, res) => {
     } catch (error) {
         console.error("Save Editing Showreel Error:", error.message);
         return res.status(500).json({ success: false, message: "Unable to save showreel settings." });
+    }
+};
+
+const deleteShowreel = async (req, res) => {
+    try {
+        const showreel = await EditingShowreel.findOneAndDelete({ key: CURRENT_KEY });
+        if (!showreel) {
+            return res.status(404).json({ success: false, message: "No showreel is currently configured." });
+        }
+        return res.status(200).json({ success: true, message: "Showreel removed." });
+    } catch (error) {
+        console.error("Delete Editing Showreel Error:", error.message);
+        return res.status(500).json({ success: false, message: "Unable to remove showreel." });
     }
 };
 
@@ -587,6 +589,7 @@ module.exports = {
     createProject,
     deleteExperience,
     deleteProject,
+    deleteShowreel,
     deleteSkill,
     getAdminExperience,
     getAdminProfile,

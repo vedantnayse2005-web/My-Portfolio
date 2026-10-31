@@ -8,6 +8,7 @@ import "./AdminDashboard.css";
 
 function AdminDashboard() {
     const navigate = useNavigate();
+    const [adminNavScrolled, setAdminNavScrolled] = useState(() => window.scrollY > 16);
 
     const [contacts, setContacts] = useState([]);
     const [projects, setProjects] = useState([]);
@@ -47,6 +48,16 @@ function AdminDashboard() {
     });
 
     const token = sessionStorage.getItem("adminToken");
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrolled = window.scrollY > 16;
+            setAdminNavScrolled((current) => current === scrolled ? current : scrolled);
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     // Fetch contact messages
     const fetchContacts = useCallback(async () => {
@@ -671,7 +682,7 @@ function AdminDashboard() {
         <div className="admin-dashboard">
 
             {/* Sidebar */}
-            <aside className="admin-sidebar">
+            <aside className={`admin-sidebar ${adminNavScrolled ? "scrolled" : ""}`}>
                 <h2>VEDANT<span>.</span></h2>
 
                 <p className="sidebar-label">ADMIN PANEL</p>

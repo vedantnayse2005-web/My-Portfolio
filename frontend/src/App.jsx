@@ -18,6 +18,7 @@ import Certificates from "./pages/Certificates";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
+import GitHubActivity from "./components/GitHubActivity";
 
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -31,6 +32,7 @@ function Home() {
       <About />
       <Skills />
       <Projects />
+      <GitHubActivity />
       <Experience />
       <Contact />
       <Footer />

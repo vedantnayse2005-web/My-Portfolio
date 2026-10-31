@@ -8,11 +8,26 @@
 
 .admin-sidebar {
   width: 250px;
+  height: 100vh;
+  height: 100dvh;
   padding: 30px 22px;
-  background: #111;
-  border-right: 1px solid #252525;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  flex: 0 0 250px;
+  z-index: 100;
+  background: rgba(17, 17, 17, 0.72);
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
   display: flex;
   flex-direction: column;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.admin-sidebar.scrolled {
+  background: rgba(17, 17, 17, 0.88);
+  box-shadow: 8px 0 24px rgba(0, 0, 0, 0.16);
 }
 
 .admin-sidebar h2 {
@@ -48,6 +63,12 @@
 .admin-sidebar nav a:hover {
   color: #a3ff12;
   background: #1b1b1b;
+}
+
+.admin-sidebar nav a:focus-visible,
+.admin-sidebar button:focus-visible {
+  outline: 2px solid #a3ff12;
+  outline-offset: 2px;
 }
 
 .admin-sidebar button {
@@ -116,9 +137,21 @@
 }
 
 @media (max-width: 768px) {
+  .admin-dashboard {
+    display: block;
+  }
+
   .admin-sidebar {
-    width: 180px;
-    padding: 20px 12px;
+    width: 100%;
+    height: auto;
+    min-height: 68px;
+    padding: 10px 14px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0 12px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .admin-main {
@@ -127,6 +160,46 @@
 
   .admin-stats {
     grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar h2 {
+    margin: 0;
+    font-size: 20px;
+  }
+
+  .admin-sidebar .sidebar-label {
+    display: none;
+  }
+
+  .admin-sidebar nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    min-width: 0;
+    margin: 8px 0 0;
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+  }
+
+  .admin-sidebar nav a {
+    flex: 0 0 auto;
+    padding: 8px 9px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .admin-sidebar > button {
+    grid-column: 3;
+    grid-row: 1;
+    margin: 0;
+    padding: 9px 10px;
+  }
+
+  .admin-main [id] {
+    scroll-margin-top: 110px;
   }
 }
 

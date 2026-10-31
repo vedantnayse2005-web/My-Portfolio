@@ -4,11 +4,18 @@ import { useNavigate } from "react-router-dom";
 import API_BASE_URL from "../config/api";
 import CertificateManagement from "../components/admin/CertificateManagement";
 import SkillsManagement from "../components/admin/SkillsManagement";
+import EditingOverview from "../components/admin/editing/EditingOverview";
+import EditingShowreel from "../components/admin/editing/EditingShowreel";
+import EditingProjects from "../components/admin/editing/EditingProjects";
+import EditingSkills from "../components/admin/editing/EditingSkills";
+import EditingExperience from "../components/admin/editing/EditingExperience";
+import EditingProfile from "../components/admin/editing/EditingProfile";
 import "./AdminDashboard.css";
 
 function AdminDashboard() {
     const navigate = useNavigate();
     const [adminNavScrolled, setAdminNavScrolled] = useState(() => window.scrollY > 16);
+    const [activeDashboardSection, setActiveDashboardSection] = useState(() => window.location.hash || "#overview");
 
     const [contacts, setContacts] = useState([]);
     const [projects, setProjects] = useState([]);
@@ -57,6 +64,14 @@ function AdminDashboard() {
 
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    useEffect(() => {
+        const updateActiveSection = () => {
+            setActiveDashboardSection(window.location.hash || "#overview");
+        };
+        window.addEventListener("hashchange", updateActiveSection);
+        return () => window.removeEventListener("hashchange", updateActiveSection);
     }, []);
 
     // Fetch contact messages
@@ -688,13 +703,51 @@ function AdminDashboard() {
                 <p className="sidebar-label">ADMIN PANEL</p>
 
                 <nav>
-                    <a href="#overview">Overview</a>
-                    <a href="#profile-photo">Profile Photo</a>
-                    <a href="#certificates">Certificates</a>
-                    <a href="#skills-management">Skills Management</a>
-                    <a href="#projects">Projects</a>
-                    <a href="#resume">Resume</a>
-                    <a href="#messages">Messages</a>
+                    <div className="admin-nav-group">
+                        <span className="admin-nav-group-label">DEVELOPER PORTFOLIO</span>
+                        {[
+                            ["#overview", "Overview", "⌂"],
+                            ["#projects", "Projects", "▤"],
+                            ["#skills-management", "Skills", "◇"],
+                            ["#certificates", "Certificates", "▧"],
+                            ["#developer-experience", "Experience & Education", "↗"]
+                        ].map(([href, label, icon]) => (
+                            <a className={activeDashboardSection === href ? "active" : ""} href={href} key={href}>
+                                <span aria-hidden="true">{icon}</span>{label}
+                            </a>
+                        ))}
+                    </div>
+                    <div className="admin-nav-group">
+                        <span className="admin-nav-group-label">EDITING PORTFOLIO</span>
+                        {[
+                            ["#editing-overview", "Editing Overview", "◉"],
+                            ["#editing-showreel-admin", "Manage Showreel", "▷"],
+                            ["#editing-projects-admin", "Editing Projects", "▣"],
+                            ["#editing-skills-admin", "Editing Skills", "◇"],
+                            ["#editing-experience-admin", "Editing Experience", "↗"],
+                            ["#editing-profile-admin", "About Me", "◎"]
+                        ].map(([href, label, icon]) => (
+                            <a className={activeDashboardSection === href ? "active" : ""} href={href} key={href}>
+                                <span aria-hidden="true">{icon}</span>{label}
+                            </a>
+                        ))}
+                    </div>
+                    <div className="admin-nav-group">
+                        <span className="admin-nav-group-label">PORTFOLIO MEDIA</span>
+                        {[["#profile-photo", "Profile Photo", "◉"], ["#resume", "Resume", "▧"]].map(([href, label, icon]) => (
+                            <a className={activeDashboardSection === href ? "active" : ""} href={href} key={href}>
+                                <span aria-hidden="true">{icon}</span>{label}
+                            </a>
+                        ))}
+                    </div>
+                    <div className="admin-nav-group">
+                        <span className="admin-nav-group-label">COMMON</span>
+                        {[["#messages", "Contact Messages", "✉"], ["#account-settings", "Account Settings", "⚙"]].map(([href, label, icon]) => (
+                            <a className={activeDashboardSection === href ? "active" : ""} href={href} key={href}>
+                                <span aria-hidden="true">{icon}</span>{label}
+                            </a>
+                        ))}
+                    </div>
                 </nav>
 
                 <button onClick={handleLogout}>
@@ -756,6 +809,8 @@ function AdminDashboard() {
                     </div>
 
                 </div>
+
+                <EditingOverview />
 
                 <section className="admin-content" id="profile-photo">
                     <div className="messages-heading">
@@ -830,6 +885,18 @@ function AdminDashboard() {
 
                 <CertificateManagement />
                 <SkillsManagement />
+
+                <section className="admin-content" id="developer-experience">
+                    <div className="messages-heading"><h2>Experience &amp; Education</h2><span>Developer portfolio</span></div>
+                    <p>These existing developer portfolio sections remain unchanged.</p>
+                    <a className="admin-section-link" href="/#experience" target="_blank" rel="noreferrer">View public experience section ↗</a>
+                </section>
+
+                <EditingShowreel />
+                <EditingProjects />
+                <EditingSkills />
+                <EditingExperience />
+                <EditingProfile />
 
                 <section className="admin-content" id="projects">
                     <div className="messages-heading">
@@ -1103,6 +1170,17 @@ function AdminDashboard() {
 
                     ))}
 
+                </section>
+
+                <section className="admin-content" id="account-settings">
+                    <div className="messages-heading">
+                        <h2>Account Settings</h2>
+                        <span>Administrator session</span>
+                    </div>
+                    <p>Admin access continues to use the existing protected login and JWT session.</p>
+                    <button className="refresh-btn account-logout-button" type="button" onClick={handleLogout}>
+                        Sign Out
+                    </button>
                 </section>
 
             </main>

@@ -19,6 +19,7 @@ const resumeRoutes = require("./routes/resumeRoutes");
 const profilePhotoRoutes = require("./routes/profilePhotoRoutes");
 const certificateRoutes = require("./routes/certificateRoutes");
 const skillRoutes = require("./routes/skillRoutes");
+const editingRoutes = require("./routes/editingRoutes");
 const protectAdmin = require("./middleware/authMiddleware");
 
 const app = express();
@@ -63,6 +64,7 @@ app.use("/api/resume", resumeRoutes);
 app.use("/api/profile-photo", profilePhotoRoutes);
 app.use("/api/certificates", certificateRoutes);
 app.use("/api/skills", skillRoutes);
+app.use("/api/editing", editingRoutes);
 
 //  Admin Dashboard
 

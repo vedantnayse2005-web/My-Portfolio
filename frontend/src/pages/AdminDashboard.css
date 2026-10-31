@@ -47,22 +47,60 @@
 }
 
 .admin-sidebar nav {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 18px;
   margin-top: 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.admin-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-nav-group-label {
+  padding: 8px 12px 4px;
+  color: #777;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
 }
 
 .admin-sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   color: #aaa;
   text-decoration: none;
-  padding: 12px;
+  padding: 9px 12px;
+  border-left: 2px solid transparent;
   border-radius: 6px;
+  font-size: 13px;
+  transition: color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
 }
 
-.admin-sidebar nav a:hover {
+.admin-sidebar nav a > span {
+  width: 16px;
+  color: #858b80;
+  font-size: 14px;
+  text-align: center;
+}
+
+.admin-sidebar nav a:hover,
+.admin-sidebar nav a.active {
   color: #a3ff12;
   background: #1b1b1b;
+  border-left-color: #a3ff12;
+}
+
+.admin-sidebar nav a:hover > span,
+.admin-sidebar nav a.active > span {
+  color: #a3ff12;
 }
 
 .admin-sidebar nav a:focus-visible,
@@ -174,21 +212,38 @@
   .admin-sidebar nav {
     grid-column: 1 / -1;
     grid-row: 2;
+    flex: initial;
     min-width: 0;
+    max-width: 100%;
     margin: 8px 0 0;
     display: flex;
     flex-direction: row;
-    gap: 4px;
+    gap: 18px;
     overflow-x: auto;
+    overflow-y: hidden;
     overscroll-behavior-x: contain;
     scrollbar-width: thin;
   }
 
+  .admin-nav-group {
+    display: contents;
+  }
+
+  .admin-nav-group-label {
+    display: none;
+  }
+
   .admin-sidebar nav a {
     flex: 0 0 auto;
+    gap: 6px;
     padding: 8px 9px;
     font-size: 12px;
     white-space: nowrap;
+  }
+
+  .admin-sidebar nav a > span {
+    width: auto;
+    font-size: 12px;
   }
 
   .admin-sidebar > button {
@@ -630,4 +685,15 @@
   .profile-photo-preview {
     width: min(180px, 60vw);
   }
+}
+
+.admin-section-link {
+  display: inline-block;
+  margin-top: 14px;
+  color: #a3ff12;
+  font-size: 13px;
+}
+
+.account-logout-button {
+  margin-top: 16px;
 }

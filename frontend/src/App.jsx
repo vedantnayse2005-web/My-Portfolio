@@ -14,6 +14,7 @@ import Projects from "./pages/Projects";
 import Experience from "./pages/Experience";
 import Contact from "./pages/Contact";
 import Certificates from "./pages/Certificates";
+import EditingHome from "./pages/EditingHome";
 
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -49,6 +50,7 @@ function App() {
         {/* Portfolio Homepage */}
         <Route path="/" element={<Home />} />
         <Route path="/certificates" element={<Certificates />} />
+        <Route path="/editing" element={<EditingHome />} />
 
         {/* Admin Login */}
         <Route

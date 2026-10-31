@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { editingAdminRequest, handleEditingAdminError } from "./editingAdminApi";
+import "./EditingAdmin.css";
 
 const emptyStats = {
     totalProjects: 0,
@@ -44,15 +45,15 @@ function EditingOverview() {
     ];
 
     return (
-        <section className="admin-content editing-admin-section" id="editing-overview">
-            <div className="messages-heading">
+        <section className="editing-admin editing-admin-section" id="editing-overview">
+            <div className="editing-admin-header">
                 <div>
-                    <span className="admin-label">EDITING PORTFOLIO</span>
+                    <span className="editing-admin-eyebrow">EDITING PORTFOLIO</span>
                     <h2>Editing Overview</h2>
                 </div>
                 <span>{loading ? "Loading..." : `${stats.totalProjects} Projects`}</span>
             </div>
-            {error && <p className="admin-error" role="alert">{error}</p>}
+            {error && <p className="editing-admin-error" role="alert">{error}</p>}
             {!loading && !error && (
                 <div className="editing-overview-grid">
                     {cards.map(([label, value]) => (
@@ -65,10 +66,10 @@ function EditingOverview() {
                 </div>
             )}
             <div className="editing-quick-actions">
-                <a className="refresh-btn" href="#editing-projects-admin">Add New Project</a>
-                <a className="refresh-btn" href="#editing-showreel-admin">Update Showreel</a>
-                <a className="refresh-btn" href="#editing-skills-admin">Add Editing Skill</a>
-                <a className="refresh-btn" href="#editing-profile-admin">Edit About Me</a>
+                <a className="editing-admin-button editing-admin-button-primary" href="#editing-projects-admin">Add New Project</a>
+                <a className="editing-admin-button" href="#editing-showreel-admin">Update Showreel</a>
+                <a className="editing-admin-button" href="#editing-skills-admin">Add Editing Skill</a>
+                <a className="editing-admin-button" href="#editing-profile-admin">Edit About Me</a>
             </div>
         </section>
     );

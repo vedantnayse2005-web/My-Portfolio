@@ -74,8 +74,8 @@ function EditingProfile() {
     };
 
     return (
-        <section className="admin-content editing-admin-section" id="editing-profile-admin">
-            <div className="messages-heading"><h2>Manage About Me</h2><span>{loading ? "Loading..." : "Editing profile"}</span></div>
+        <section className="editing-admin editing-admin-section" id="editing-profile-admin">
+            <div className="editing-admin-header"><h2>Manage About Me</h2><span>{loading ? "Loading..." : "Editing profile"}</span></div>
             <form className="editing-admin-form" onSubmit={submit}>
                 <label className="editing-admin-wide">
                     Professional introduction
@@ -96,10 +96,10 @@ function EditingProfile() {
                 <label>Contact email<input name="contactEmail" type="email" maxLength={254} value={form.contactEmail} onChange={change} /></label>
                 <label>Instagram URL<input name="instagramUrl" type="url" maxLength={2048} value={form.instagramUrl} onChange={change} /></label>
                 <label className="editing-admin-wide">LinkedIn URL<input name="linkedinUrl" type="url" maxLength={2048} value={form.linkedinUrl} onChange={change} /></label>
-                {error && <p className="admin-error editing-admin-wide" role="alert">{error}</p>}
+                {error && <p className="editing-admin-error editing-admin-wide" role="alert">{error}</p>}
                 {status && <p className="editing-admin-success editing-admin-wide" role="status">{status}</p>}
                 <div className="editing-admin-actions editing-admin-wide">
-                    <button className="refresh-btn" type="submit" disabled={saving || loading}>{saving ? "Saving..." : "Save About Me"}</button>
+                    <button className="editing-admin-button editing-admin-button-primary" type="submit" disabled={saving || loading}>{saving ? "Saving..." : "Save About Me"}</button>
                 </div>
             </form>
         </section>

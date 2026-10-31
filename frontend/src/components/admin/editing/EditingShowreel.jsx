@@ -74,8 +74,8 @@ function EditingShowreel() {
     const embedUrl = getVideoEmbedUrl(form.videoUrl);
 
     return (
-        <section className="admin-content editing-admin-section" id="editing-showreel-admin">
-            <div className="messages-heading">
+        <section className="editing-admin editing-admin-section" id="editing-showreel-admin">
+            <div className="editing-admin-header">
                 <h2>Manage Showreel</h2>
                 <span>{loading ? "Loading..." : form.enabled ? "Enabled" : "Disabled"}</span>
             </div>
@@ -96,10 +96,10 @@ function EditingShowreel() {
                     <input name="enabled" type="checkbox" checked={form.enabled} onChange={updateField} />
                     Show on public editing portfolio
                 </label>
-                {error && <p className="admin-error editing-admin-wide" role="alert">{error}</p>}
+                {error && <p className="editing-admin-error editing-admin-wide" role="alert">{error}</p>}
                 {status && <p className="editing-admin-success editing-admin-wide" role="status">{status}</p>}
                 <div className="editing-admin-actions editing-admin-wide">
-                    <button className="refresh-btn" type="submit" disabled={saving || loading}>
+                    <button className="editing-admin-button editing-admin-button-primary" type="submit" disabled={saving || loading}>
                         {saving ? "Saving..." : "Save Showreel"}
                     </button>
                 </div>

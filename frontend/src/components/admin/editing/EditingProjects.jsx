@@ -209,8 +209,8 @@ function EditingProjects() {
     const embedUrl = getVideoEmbedUrl(form.videoUrl);
 
     return (
-        <section className="admin-content editing-admin-section" id="editing-projects-admin">
-            <div className="messages-heading">
+        <section className="editing-admin editing-admin-section" id="editing-projects-admin">
+            <div className="editing-admin-header">
                 <h2>{editingId ? "Edit Editing Project" : "Manage Editing Projects"}</h2>
                 <span>{projects.length} Total</span>
             </div>
@@ -258,11 +258,11 @@ function EditingProjects() {
                 </label>
                 {thumbnailFile && <p className="editing-admin-wide">Selected: {thumbnailFile.name}</p>}
                 {previewUrl && <div className="editing-admin-image-preview editing-admin-wide"><img src={previewUrl} alt="Editing project thumbnail preview" /></div>}
-                {error && <p className="admin-error editing-admin-wide" role="alert">{error}</p>}
+                {error && <p className="editing-admin-error editing-admin-wide" role="alert">{error}</p>}
                 {status && <p className="editing-admin-success editing-admin-wide" role="status">{status}</p>}
                 <div className="editing-admin-actions editing-admin-wide">
-                    <button className="refresh-btn" type="submit" disabled={saving}>{saving ? "Saving..." : editingId ? "Save Project" : "Add Project"}</button>
-                    {editingId && <button className="cancel-project-btn" type="button" onClick={resetForm}>Cancel</button>}
+                    <button className="editing-admin-button editing-admin-button-primary" type="submit" disabled={saving}>{saving ? "Saving..." : editingId ? "Save Project" : "Add Project"}</button>
+                    {editingId && <button className="editing-admin-button" type="button" onClick={resetForm}>Cancel</button>}
                 </div>
             </form>
 
@@ -289,9 +289,9 @@ function EditingProjects() {
                             <p>{project.description}</p>
                         </div>
                         <div className="editing-admin-record-actions">
-                            <button className="edit-project-btn" type="button" onClick={() => handleEdit(project)}>Edit</button>
-                            <button className="read-toggle-btn" type="button" onClick={() => handlePublish(project)}>{project.published ? "Unpublish" : "Publish"}</button>
-                            <button className="delete-message-btn" type="button" disabled={deletingId === project._id} onClick={() => handleDelete(project)}>{deletingId === project._id ? "Deleting..." : "Delete"}</button>
+                            <button className="editing-admin-button" type="button" onClick={() => handleEdit(project)}>Edit</button>
+                            <button className="editing-admin-button editing-admin-button-toggle" type="button" onClick={() => handlePublish(project)}>{project.published ? "Unpublish" : "Publish"}</button>
+                            <button className="editing-admin-button editing-admin-button-danger" type="button" disabled={deletingId === project._id} onClick={() => handleDelete(project)}>{deletingId === project._id ? "Deleting..." : "Delete"}</button>
                         </div>
                     </article>
                 ))}

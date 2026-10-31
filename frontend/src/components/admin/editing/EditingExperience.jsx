@@ -108,8 +108,8 @@ function EditingExperience() {
     };
 
     return (
-        <section className="admin-content editing-admin-section" id="editing-experience-admin">
-            <div className="messages-heading"><h2>Manage Editing Experience</h2><span>{entries.length} Total</span></div>
+        <section className="editing-admin editing-admin-section" id="editing-experience-admin">
+            <div className="editing-admin-header"><h2>Manage Editing Experience</h2><span>{entries.length} Total</span></div>
             <form className="editing-admin-form" onSubmit={submit}>
                 <label>Role<input name="role" maxLength={140} value={form.role} onChange={change} required /></label>
                 <label>Organization or client<input name="organization" maxLength={160} value={form.organization} onChange={change} required /></label>
@@ -120,11 +120,11 @@ function EditingExperience() {
                 <label className="editing-admin-toggle"><input name="currentlyWorking" type="checkbox" checked={form.currentlyWorking} onChange={change} /> Currently working</label>
                 <label className="editing-admin-toggle"><input name="published" type="checkbox" checked={form.published} onChange={change} /> Publish entry</label>
                 <label className="editing-admin-wide">Description<textarea name="description" rows="4" maxLength={3000} value={form.description} onChange={change} required /></label>
-                {error && <p className="admin-error editing-admin-wide" role="alert">{error}</p>}
+                {error && <p className="editing-admin-error editing-admin-wide" role="alert">{error}</p>}
                 {status && <p className="editing-admin-success editing-admin-wide" role="status">{status}</p>}
                 <div className="editing-admin-actions editing-admin-wide">
-                    <button className="refresh-btn" type="submit" disabled={saving}>{saving ? "Saving..." : editingId ? "Save Experience" : "Add Experience"}</button>
-                    {editingId && <button className="cancel-project-btn" type="button" onClick={reset}>Cancel</button>}
+                    <button className="editing-admin-button editing-admin-button-primary" type="submit" disabled={saving}>{saving ? "Saving..." : editingId ? "Save Experience" : "Add Experience"}</button>
+                    {editingId && <button className="editing-admin-button" type="button" onClick={reset}>Cancel</button>}
                 </div>
             </form>
             <div className="editing-admin-record-list">
@@ -139,9 +139,9 @@ function EditingExperience() {
                             <p>{entry.description}</p>
                         </div>
                         <div className="editing-admin-record-actions">
-                            <button className="edit-project-btn" type="button" onClick={() => edit(entry)}>Edit</button>
-                            <button className="read-toggle-btn" type="button" onClick={() => togglePublished(entry)}>{entry.published ? "Unpublish" : "Publish"}</button>
-                            <button className="delete-message-btn" type="button" onClick={() => remove(entry)}>Delete</button>
+                            <button className="editing-admin-button" type="button" onClick={() => edit(entry)}>Edit</button>
+                            <button className="editing-admin-button editing-admin-button-toggle" type="button" onClick={() => togglePublished(entry)}>{entry.published ? "Unpublish" : "Publish"}</button>
+                            <button className="editing-admin-button editing-admin-button-danger" type="button" onClick={() => remove(entry)}>Delete</button>
                         </div>
                     </article>
                 ))}

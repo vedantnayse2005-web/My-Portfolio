@@ -115,8 +115,8 @@ function EditingSkills() {
     };
 
     return (
-        <section className="admin-content editing-admin-section" id="editing-skills-admin">
-            <div className="messages-heading"><h2>Manage Editing Skills</h2><span>{skills.length} Total</span></div>
+        <section className="editing-admin editing-admin-section" id="editing-skills-admin">
+            <div className="editing-admin-header"><h2>Manage Editing Skills</h2><span>{skills.length} Total</span></div>
             <form className="editing-admin-form" onSubmit={submit}>
                 <label>Skill or software name<input name="name" maxLength={100} value={form.name} onChange={change} required /></label>
                 <label>Category<select name="category" value={form.category} onChange={change}>{categories.map((category) => <option key={category}>{category}</option>)}</select></label>
@@ -124,11 +124,11 @@ function EditingSkills() {
                 <label>Display order<input name="displayOrder" type="number" min="1" max="10000" step="1" value={form.displayOrder} onChange={change} required /></label>
                 <label className="editing-admin-toggle"><input name="isTool" type="checkbox" checked={form.isTool} onChange={change} /> Software or tool</label>
                 <label className="editing-admin-toggle"><input name="enabled" type="checkbox" checked={form.enabled} onChange={change} /> Enabled on public page</label>
-                {error && <p className="admin-error editing-admin-wide" role="alert">{error}</p>}
+                {error && <p className="editing-admin-error editing-admin-wide" role="alert">{error}</p>}
                 {status && <p className="editing-admin-success editing-admin-wide" role="status">{status}</p>}
                 <div className="editing-admin-actions editing-admin-wide">
-                    <button className="refresh-btn" type="submit" disabled={saving}>{saving ? "Saving..." : editingId ? "Save Skill" : "Add Skill"}</button>
-                    {editingId && <button className="cancel-project-btn" type="button" onClick={reset}>Cancel</button>}
+                    <button className="editing-admin-button editing-admin-button-primary" type="submit" disabled={saving}>{saving ? "Saving..." : editingId ? "Save Skill" : "Add Skill"}</button>
+                    {editingId && <button className="editing-admin-button" type="button" onClick={reset}>Cancel</button>}
                 </div>
             </form>
             <div className="editing-admin-record-list">
@@ -142,9 +142,9 @@ function EditingSkills() {
                             <p>{skill.proficiencyLevel || "Proficiency not set"}</p>
                         </div>
                         <div className="editing-admin-record-actions">
-                            <button className="edit-project-btn" type="button" onClick={() => edit(skill)}>Edit</button>
-                            <button className="read-toggle-btn" type="button" onClick={() => toggleEnabled(skill)}>{skill.enabled ? "Disable" : "Enable"}</button>
-                            <button className="delete-message-btn" type="button" onClick={() => remove(skill)}>Delete</button>
+                            <button className="editing-admin-button" type="button" onClick={() => edit(skill)}>Edit</button>
+                            <button className="editing-admin-button editing-admin-button-toggle" type="button" onClick={() => toggleEnabled(skill)}>{skill.enabled ? "Disable" : "Enable"}</button>
+                            <button className="editing-admin-button editing-admin-button-danger" type="button" onClick={() => remove(skill)}>Delete</button>
                         </div>
                     </article>
                 ))}

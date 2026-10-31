@@ -12,6 +12,13 @@ import EditingExperience from "../components/admin/editing/EditingExperience";
 import EditingProfile from "../components/admin/editing/EditingProfile";
 import "./AdminDashboard.css";
 
+const getProfilePhotoRequestError = (error, action) => {
+    if (error instanceof TypeError || error.message === "Failed to fetch") {
+        return `Could not ${action}: the profile photo API is unreachable. Check VITE_API_URL and allow this frontend origin in backend CORS.`;
+    }
+    return error.message || `Unable to ${action}.`;
+};
+
 function AdminDashboard() {
     const navigate = useNavigate();
     const [adminNavScrolled, setAdminNavScrolled] = useState(() => window.scrollY > 16);
@@ -160,13 +167,14 @@ function AdminDashboard() {
             }
 
             if (!response.ok) {
-                throw new Error("Unable to fetch profile photo status.");
+                const result = await response.json().catch(() => ({}));
+                throw new Error(result.message || `Profile photo request failed (${response.status}).`);
             }
 
             await response.body?.cancel();
             setProfilePhotoAvailable(true);
         } catch (fetchError) {
-            setProfilePhotoError(fetchError.message);
+            setProfilePhotoError(getProfilePhotoRequestError(fetchError, "retrieve the current profile photo"));
         } finally {
             setProfilePhotoLoading(false);
         }
@@ -652,7 +660,7 @@ function AdminDashboard() {
             const fileInput = document.getElementById("profile-photo-file");
             if (fileInput) fileInput.value = "";
         } catch (uploadError) {
-            setProfilePhotoError(uploadError.message);
+            setProfilePhotoError(getProfilePhotoRequestError(uploadError, "upload the profile photo"));
         } finally {
             setUploadingProfilePhoto(false);
         }
@@ -687,7 +695,7 @@ function AdminDashboard() {
             setProfilePhotoVersion(Date.now());
             setProfilePhotoStatus(result.warning || "Profile photo removed successfully.");
         } catch (removeError) {
-            setProfilePhotoError(removeError.message);
+            setProfilePhotoError(getProfilePhotoRequestError(removeError, "remove the profile photo"));
         } finally {
             setRemovingProfilePhoto(false);
         }
@@ -830,6 +838,10 @@ function AdminDashboard() {
                                 <img
                                     src={`${API_BASE_URL}/api/profile-photo?v=${profilePhotoVersion}`}
                                     alt="Current profile photo"
+                                    onError={(event) => {
+                                        event.currentTarget.hidden = true;
+                                        setProfilePhotoError("The profile photo record exists, but its image could not be loaded. Try uploading it again.");
+                                    }}
                                 />
                             ) : (
                                 <span>{profilePhotoLoading ? "Loading" : "VN"}</span>

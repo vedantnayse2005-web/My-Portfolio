@@ -47,9 +47,23 @@ const allowedOrigins = process.env.FRONTEND_URL
         .filter(Boolean)
     : ["http://localhost:5173"];
 
+const isLocalDevelopmentOrigin = (origin) => {
+    try {
+        const parsedOrigin = new URL(origin);
+        return parsedOrigin.protocol === "http:" &&
+            ["localhost", "127.0.0.1", "[::1]"].includes(parsedOrigin.hostname);
+    } catch {
+        return false;
+    }
+};
 
 app.use(cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin) || isLocalDevelopmentOrigin(origin)) {
+            return callback(null, true);
+        }
+        return callback(null, false);
+    },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));

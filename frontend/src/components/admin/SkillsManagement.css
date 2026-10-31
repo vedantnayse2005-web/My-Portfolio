@@ -1,0 +1,157 @@
+.skills-admin-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0 32px;
+}
+
+.skills-admin-form label,
+.skills-admin-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #bdbdbd;
+  font-size: 13px;
+}
+
+.skills-admin-form input:not([type="checkbox"]),
+.skills-admin-form select,
+.skills-admin-filters input,
+.skills-admin-filters select {
+  width: 100%;
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background: #080808;
+  color: #fff;
+  font: inherit;
+}
+
+.skills-admin-form input:focus,
+.skills-admin-form select:focus,
+.skills-admin-filters input:focus,
+.skills-admin-filters select:focus {
+  outline: none;
+  border-color: #a3ff12;
+}
+
+.skill-active-field {
+  flex-direction: row !important;
+  align-items: center;
+}
+
+.skills-admin-form > .admin-error,
+.skills-admin-status,
+.skills-admin-actions {
+  grid-column: 1 / -1;
+}
+
+.skills-admin-status {
+  margin: 0;
+  color: #a3ff12 !important;
+}
+
+.skills-admin-filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 12px;
+  margin: 28px 0 18px;
+}
+
+.skills-admin-list {
+  display: grid;
+  gap: 12px;
+}
+
+.skills-admin-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 16px;
+  border: 1px solid #303030;
+  border-radius: 7px;
+  background: #191919;
+}
+
+.skills-admin-item-details {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.skills-admin-item-details > img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.skills-admin-item h3 {
+  color: #a3ff12;
+}
+
+.skills-admin-item p {
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+}
+
+.skills-admin-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.skills-admin-item-actions > span {
+  font-size: 12px;
+}
+
+.skills-admin-item-actions .active {
+  color: #a3ff12;
+}
+
+.skills-admin-item-actions .inactive {
+  color: #ffb347;
+}
+
+@media (max-width: 800px) {
+  .skills-admin-filters {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .skills-admin-filters label:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .skills-admin-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .skills-admin-item-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .skills-admin-form {
+    grid-template-columns: 1fr;
+  }
+
+  .skills-admin-form > .admin-error,
+  .skills-admin-status,
+  .skills-admin-actions {
+    grid-column: auto;
+  }
+
+  .skills-admin-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .skills-admin-filters label:first-child {
+    grid-column: auto;
+  }
+}

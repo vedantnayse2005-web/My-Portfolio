@@ -1,15 +1,17 @@
 
 import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const isHome = useLocation().pathname === "/";
 
   const closeMenu = () => setMenuOpen(false);
 
   return (
     <nav className="navbar">
-      <a href="#home" className="brand" onClick={closeMenu}>
+      <a href={isHome ? "#home" : "/"} className="brand" onClick={closeMenu}>
         <span className="brand-symbol">V</span>
         <span>DEV<span className="green">FOLIO.</span></span>
       </a>
@@ -24,15 +26,16 @@ function Navbar() {
       </button>
 
       <div className={`nav-links ${menuOpen ? "active" : ""}`}>
-        <a href="#home" onClick={closeMenu}>Home</a>
-        <a href="#about" onClick={closeMenu}>About</a>
-        <a href="#skills" onClick={closeMenu}>Skills</a>
-        <a href="#projects" onClick={closeMenu}>Projects</a>
-        <a href="#experience" onClick={closeMenu}>Experience</a>
-        <a href="#contact" onClick={closeMenu}>Contact</a>
+        <a href={isHome ? "#home" : "/"} onClick={closeMenu}>Home</a>
+        <a href={isHome ? "#about" : "/#about"} onClick={closeMenu}>About</a>
+        <a href={isHome ? "#skills" : "/#skills"} onClick={closeMenu}>Skills</a>
+        <a href={isHome ? "#projects" : "/#projects"} onClick={closeMenu}>Projects</a>
+        <a href={isHome ? "#experience" : "/#experience"} onClick={closeMenu}>Experience</a>
+        <Link to="/certificates" onClick={closeMenu}>Certificates</Link>
+        <a href={isHome ? "#contact" : "/#contact"} onClick={closeMenu}>Contact</a>
       </div>
 
-      <a href="#contact" className="nav-contact">
+      <a href={isHome ? "#contact" : "/#contact"} className="nav-contact" onClick={closeMenu}>
         Let's Talk <span>↗</span>
       </a>
     </nav>

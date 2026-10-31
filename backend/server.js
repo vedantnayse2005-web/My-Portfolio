@@ -17,6 +17,8 @@ const authRoutes = require("./routes/authRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 const resumeRoutes = require("./routes/resumeRoutes");
 const profilePhotoRoutes = require("./routes/profilePhotoRoutes");
+const certificateRoutes = require("./routes/certificateRoutes");
+const skillRoutes = require("./routes/skillRoutes");
 const protectAdmin = require("./middleware/authMiddleware");
 
 const app = express();
@@ -59,6 +61,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/resume", resumeRoutes);
 app.use("/api/profile-photo", profilePhotoRoutes);
+app.use("/api/certificates", certificateRoutes);
+app.use("/api/skills", skillRoutes);
 
 //  Admin Dashboard
 

@@ -73,11 +73,34 @@
 }
 
 .skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   padding: 8px 13px;
   border: 1px solid #30392b;
   border-radius: 5px;
   color: #b7beb2;
   font-size: 13px;
+}
+
+.skill-tag img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.skill-tag small {
+  color: #a8ff35;
+  font-size: 10px;
+}
+
+.skills-feedback {
+  margin-top: 24px;
+  color: #999f95;
+}
+
+.skills-error {
+  color: #ff7777;
 }
 
 @media (max-width: 900px) {

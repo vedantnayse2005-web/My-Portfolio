@@ -13,6 +13,7 @@ import Skills from "./pages/Skills";
 import Projects from "./pages/Projects";
 import Experience from "./pages/Experience";
 import Contact from "./pages/Contact";
+import Certificates from "./pages/Certificates";
 
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -45,6 +46,7 @@ function App() {
 
         {/* Portfolio Homepage */}
         <Route path="/" element={<Home />} />
+        <Route path="/certificates" element={<Certificates />} />
 
         {/* Admin Login */}
         <Route

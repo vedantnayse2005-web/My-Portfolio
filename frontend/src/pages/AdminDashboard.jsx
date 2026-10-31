@@ -2,6 +2,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API_BASE_URL from "../config/api";
+import CertificateManagement from "../components/admin/CertificateManagement";
+import SkillsManagement from "../components/admin/SkillsManagement";
 import "./AdminDashboard.css";
 
 function AdminDashboard() {
@@ -677,6 +679,8 @@ function AdminDashboard() {
                 <nav>
                     <a href="#overview">Overview</a>
                     <a href="#profile-photo">Profile Photo</a>
+                    <a href="#certificates">Certificates</a>
+                    <a href="#skills-management">Skills Management</a>
                     <a href="#projects">Projects</a>
                     <a href="#resume">Resume</a>
                     <a href="#messages">Messages</a>
@@ -812,6 +816,9 @@ function AdminDashboard() {
                         </form>
                     </div>
                 </section>
+
+                <CertificateManagement />
+                <SkillsManagement />
 
                 <section className="admin-content" id="projects">
                     <div className="messages-heading">
@@ -988,7 +995,7 @@ function AdminDashboard() {
                             )}
                         </div>
                     )}
-
+   
                     <form className="resume-upload-form" onSubmit={handleResumeUpload}>
                         <label htmlFor="resume-file">Upload a PDF resume (maximum 5 MB)</label>
                         <input

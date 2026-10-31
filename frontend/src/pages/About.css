@@ -49,6 +49,29 @@
   max-width: 650px;
 }
 
+.about-certificates-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 11px 15px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.about-certificates-link span {
+  color: var(--green);
+}
+
+.about-certificates-link:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
 .about-details {
   display: flex;
   flex-direction: column;

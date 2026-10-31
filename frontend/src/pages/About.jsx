@@ -1,5 +1,6 @@
 
 import "./About.css";
+import { Link } from "react-router-dom";
 
 function About() {
   return (
@@ -30,6 +31,9 @@ function About() {
             I'm currently focused on strengthening my full-stack
             development skills and growing as a software developer.
           </p>
+          <Link className="about-certificates-link" to="/certificates">
+            View All Certificates <span>↗</span>
+          </Link>
         </div>
 
         <div className="about-details">

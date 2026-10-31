@@ -1,0 +1,128 @@
+.certificate-admin-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0 32px;
+}
+
+.certificate-admin-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #bdbdbd;
+  font-size: 13px;
+}
+
+.certificate-admin-form input:not([type="checkbox"]),
+.certificate-admin-form select,
+.certificate-admin-form textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background: #080808;
+  color: #fff;
+  font: inherit;
+}
+
+.certificate-admin-form input:focus,
+.certificate-admin-form select:focus,
+.certificate-admin-form textarea:focus {
+  outline: none;
+  border-color: #a3ff12;
+}
+
+.certificate-description-field,
+.certificate-publish-field,
+.certificate-admin-form > .admin-error,
+.certificate-admin-status,
+.certificate-admin-actions {
+  grid-column: 1 / -1;
+}
+
+.certificate-publish-field {
+  flex-direction: row !important;
+  align-items: center;
+}
+
+.certificate-admin-form small {
+  color: #929a90;
+  overflow-wrap: anywhere;
+}
+
+.certificate-admin-status {
+  margin: 0;
+  color: #a3ff12 !important;
+}
+
+.certificate-admin-actions,
+.certificate-admin-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+}
+
+.certificate-admin-list {
+  display: grid;
+  gap: 12px;
+}
+
+.certificate-admin-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid #303030;
+  border-radius: 7px;
+  background: #191919;
+}
+
+.certificate-admin-item h3 {
+  color: #a3ff12;
+}
+
+.certificate-admin-item p {
+  margin-top: 7px;
+  overflow-wrap: anywhere;
+}
+
+.certificate-admin-item-actions {
+  justify-content: flex-end;
+}
+
+.certificate-admin-item-actions > span {
+  font-size: 12px;
+}
+
+.certificate-admin-item-actions .published {
+  color: #a3ff12;
+}
+
+.certificate-admin-item-actions .unpublished {
+  color: #ffb347;
+}
+
+@media (max-width: 700px) {
+  .certificate-admin-form {
+    grid-template-columns: 1fr;
+  }
+
+  .certificate-description-field,
+  .certificate-publish-field,
+  .certificate-admin-form > .admin-error,
+  .certificate-admin-status,
+  .certificate-admin-actions {
+    grid-column: auto;
+  }
+
+  .certificate-admin-item {
+    flex-direction: column;
+  }
+
+  .certificate-admin-item-actions {
+    justify-content: flex-start;
+  }
+}

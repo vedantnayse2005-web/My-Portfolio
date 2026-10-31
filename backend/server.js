@@ -40,12 +40,15 @@ const apiLimiter = rateLimit({
 
 app.use("/api", apiLimiter);
 
-const allowedOrigins = process.env.FRONTEND_URL
-    ? process.env.FRONTEND_URL
-        .split(",")
-        .map((origin) => origin.trim())
-        .filter(Boolean)
-    : ["http://localhost:5173"];
+const allowedOrigins = [
+    "https://vedant-portfolio-r64h.onrender.com",
+    ...(process.env.FRONTEND_URL
+        ? process.env.FRONTEND_URL
+            .split(",")
+            .map((origin) => origin.trim())
+            .filter(Boolean)
+        : ["http://localhost:5173"])
+];
 
 const isLocalDevelopmentOrigin = (origin) => {
     try {
@@ -65,7 +68,8 @@ app.use(cors({
         return callback(null, false);
     },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: false
 }));
 
 app.use(express.json({ limit: "10kb" }));

@@ -1,5 +1,5 @@
 const getParsedUrl = (value) => {
-    if (typeof value !== "string") return null;
+    if (typeof value !== "string" || !value.trim() || value.length > 2048) return null;
     try {
         const url = new URL(value.trim());
         return url.protocol === "http:" || url.protocol === "https:" ? url : null;

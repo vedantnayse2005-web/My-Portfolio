@@ -70,10 +70,10 @@ function ShowreelEmbed({ videoUrl, title, platform, embedUrl }) {
         {embedFailed
           ? "The embed could not load. The content may be private, deleted, or unavailable. "
           : platform === "instagram"
-            ? "Instagram may block embeds for private, deleted, or unavailable posts. "
+            ? "If the Instagram embed is unavailable, watch the original on Instagram. "
             : "If the embedded player is unavailable, open the original video. "}
         <a href={videoUrl} target="_blank" rel="noreferrer">
-          {platform === "instagram" ? "Open original on Instagram ↗" : "Open original video ↗"}
+          {platform === "instagram" ? "Watch on Instagram ↗" : "Open original video ↗"}
         </a>
       </p>
     </>

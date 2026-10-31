@@ -161,7 +161,7 @@ function EditingShowreel() {
                     {previewError && <p className="editing-admin-embed-fallback" role="status">Preview unavailable. The video may be private, deleted, or block embedding.</p>}
                     {platform === "instagram" && (
                         <p className="editing-admin-embed-fallback">
-                            Instagram may block embeds for private, deleted, or unavailable posts. <a href={form.videoUrl} target="_blank" rel="noreferrer">Open original on Instagram ↗</a>
+                            If the Instagram embed is unavailable, <a href={form.videoUrl} target="_blank" rel="noreferrer">watch on Instagram ↗</a>.
                         </p>
                     )}
                 </div>

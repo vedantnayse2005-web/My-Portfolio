@@ -1,8 +1,49 @@
 
+import { useEffect, useState } from "react";
 import API_BASE_URL from "../config/api";
 import "./Hero.css";
 
 function Hero() {
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState("");
+  const [profilePhotoLoading, setProfilePhotoLoading] = useState(true);
+
+  useEffect(() => {
+    let isActive = true;
+    let objectUrl;
+
+    const fetchProfilePhoto = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/profile-photo`);
+        if (!response.ok) {
+          if (response.status !== 404) {
+            throw new Error("Unable to load profile photo.");
+          }
+          return;
+        }
+
+        const photo = await response.blob();
+        if (isActive) {
+          objectUrl = URL.createObjectURL(photo);
+          setProfilePhotoUrl(objectUrl);
+        }
+      } catch {
+        if (isActive) {
+          setProfilePhotoUrl("");
+        }
+      } finally {
+        if (isActive) {
+          setProfilePhotoLoading(false);
+        }
+      }
+    };
+
+    fetchProfilePhoto();
+    return () => {
+      isActive = false;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, []);
+
   return (
     <main id="home" className="hero-section">
       <div className="hero-content">
@@ -17,12 +58,18 @@ function Hero() {
         </p>
 
         {/* Profile Photo */}
-        <div className="hero-profile">
-          <img
-            src="/profile.jpg"
-            alt="Vedant Nayse"
-            className="hero-profile-image"
-          />
+        <div className="hero-profile" aria-busy={profilePhotoLoading}>
+          {profilePhotoUrl ? (
+            <img
+              src={profilePhotoUrl}
+              alt="Vedant Nayse"
+              className="hero-profile-image"
+            />
+          ) : (
+            <div className="hero-profile-fallback" role="status">
+              {profilePhotoLoading ? "Loading" : "VN"}
+            </div>
+          )}
         </div>
 
         <h1>

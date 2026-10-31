@@ -26,6 +26,15 @@ function AdminDashboard() {
     const [resumeFile, setResumeFile] = useState(null);
     const [resumeUploadStatus, setResumeUploadStatus] = useState("");
     const [uploadingResume, setUploadingResume] = useState(false);
+    const [profilePhotoAvailable, setProfilePhotoAvailable] = useState(false);
+    const [profilePhotoLoading, setProfilePhotoLoading] = useState(true);
+    const [profilePhotoError, setProfilePhotoError] = useState("");
+    const [profilePhotoStatus, setProfilePhotoStatus] = useState("");
+    const [profilePhotoFile, setProfilePhotoFile] = useState(null);
+    const [profilePhotoPreview, setProfilePhotoPreview] = useState("");
+    const [profilePhotoVersion, setProfilePhotoVersion] = useState(0);
+    const [uploadingProfilePhoto, setUploadingProfilePhoto] = useState(false);
+    const [removingProfilePhoto, setRemovingProfilePhoto] = useState(false);
     const [projectForm, setProjectForm] = useState({
         title: "",
         description: "",
@@ -114,6 +123,33 @@ function AdminDashboard() {
         }
     }, [navigate, token]);
 
+    const fetchProfilePhotoStatus = useCallback(async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/profile-photo`);
+            if (response.status === 404) {
+                setProfilePhotoAvailable(false);
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error("Unable to fetch profile photo status.");
+            }
+
+            await response.body?.cancel();
+            setProfilePhotoAvailable(true);
+        } catch (fetchError) {
+            setProfilePhotoError(fetchError.message);
+        } finally {
+            setProfilePhotoLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            if (profilePhotoPreview) URL.revokeObjectURL(profilePhotoPreview);
+        };
+    }, [profilePhotoPreview]);
+
     useEffect(() => {
         if (!token) {
             navigate("/admin/login");
@@ -126,13 +162,14 @@ function AdminDashboard() {
                 fetchContacts();
                 fetchProjects();
                 fetchResumeStatus();
+                fetchProfilePhotoStatus();
             }
         });
 
         return () => {
             isActive = false;
         };
-    }, [token, navigate, fetchContacts, fetchProjects, fetchResumeStatus]);
+    }, [token, navigate, fetchContacts, fetchProjects, fetchResumeStatus, fetchProfilePhotoStatus]);
 
     // Logout
     const handleLogout = () => {
@@ -515,6 +552,119 @@ function AdminDashboard() {
         }
     };
 
+    const handleProfilePhotoFileChange = (event) => {
+        const selectedFile = event.target.files?.[0] || null;
+        const allowedTypes = new Map([
+            ["image/jpeg", [".jpg", ".jpeg"]],
+            ["image/png", [".png"]],
+            ["image/webp", [".webp"]]
+        ]);
+        const extension = selectedFile?.name.slice(selectedFile.name.lastIndexOf(".")).toLowerCase();
+        setProfilePhotoError("");
+        setProfilePhotoStatus("");
+
+        if (selectedFile && !allowedTypes.get(selectedFile.type)?.includes(extension)) {
+            setProfilePhotoFile(null);
+            setProfilePhotoPreview("");
+            setProfilePhotoError("Choose a JPG, JPEG, PNG, or WebP image.");
+            event.target.value = "";
+            return;
+        }
+
+        if (selectedFile && selectedFile.size > 5 * 1024 * 1024) {
+            setProfilePhotoFile(null);
+            setProfilePhotoPreview("");
+            setProfilePhotoError("Profile photos must be 5 MB or smaller.");
+            event.target.value = "";
+            return;
+        }
+
+        setProfilePhotoFile(selectedFile);
+    setProfilePhotoPreview(selectedFile ? URL.createObjectURL(selectedFile) : "");
+    };
+
+    const handleProfilePhotoUpload = async (event) => {
+        event.preventDefault();
+        if (!profilePhotoFile) {
+            setProfilePhotoError("Choose a photo to upload.");
+            return;
+        }
+
+        setUploadingProfilePhoto(true);
+        setProfilePhotoError("");
+        setProfilePhotoStatus("");
+        const formData = new FormData();
+        formData.append("photo", profilePhotoFile);
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/profile-photo`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                body: formData
+            });
+            const result = await response.json();
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    sessionStorage.removeItem("adminToken");
+                    navigate("/admin/login");
+                    return;
+                }
+
+                throw new Error(result.message || "Unable to upload profile photo.");
+            }
+
+            setProfilePhotoAvailable(true);
+            setProfilePhotoVersion(Date.now());
+            setProfilePhotoFile(null);
+            setProfilePhotoPreview("");
+            setProfilePhotoStatus(result.warning || "Profile photo uploaded successfully.");
+            const fileInput = document.getElementById("profile-photo-file");
+            if (fileInput) fileInput.value = "";
+        } catch (uploadError) {
+            setProfilePhotoError(uploadError.message);
+        } finally {
+            setUploadingProfilePhoto(false);
+        }
+    };
+
+    const handleProfilePhotoRemove = async () => {
+        if (!window.confirm("Remove the current profile photo from your portfolio?")) return;
+
+        setRemovingProfilePhoto(true);
+        setProfilePhotoError("");
+        setProfilePhotoStatus("");
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/profile-photo`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const result = await response.json();
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    sessionStorage.removeItem("adminToken");
+                    navigate("/admin/login");
+                    return;
+                }
+
+                throw new Error(result.message || "Unable to remove profile photo.");
+            }
+
+            setProfilePhotoAvailable(false);
+            setProfilePhotoVersion(Date.now());
+            setProfilePhotoStatus(result.warning || "Profile photo removed successfully.");
+        } catch (removeError) {
+            setProfilePhotoError(removeError.message);
+        } finally {
+            setRemovingProfilePhoto(false);
+        }
+    };
+
     return (
         <div className="admin-dashboard">
 
@@ -526,6 +676,7 @@ function AdminDashboard() {
 
                 <nav>
                     <a href="#overview">Overview</a>
+                    <a href="#profile-photo">Profile Photo</a>
                     <a href="#projects">Projects</a>
                     <a href="#resume">Resume</a>
                     <a href="#messages">Messages</a>
@@ -555,9 +706,12 @@ function AdminDashboard() {
                             setProjectsError("");
                             setResumeLoading(true);
                             setResumeError("");
+                            setProfilePhotoLoading(true);
+                            setProfilePhotoError("");
                             fetchContacts();
                             fetchProjects();
                             fetchResumeStatus();
+                            fetchProfilePhotoStatus();
                         }}
                         disabled={loading}
                     >
@@ -587,6 +741,77 @@ function AdminDashboard() {
                     </div>
 
                 </div>
+
+                <section className="admin-content" id="profile-photo">
+                    <div className="messages-heading">
+                        <h2>Profile Photo Management</h2>
+                        <span>
+                            {profilePhotoLoading
+                                ? "Loading..."
+                                : profilePhotoAvailable ? "Active" : "Not set"}
+                        </span>
+                    </div>
+
+                    <div className="profile-photo-management">
+                        <div className="profile-photo-preview">
+                            {profilePhotoPreview ? (
+                                <img src={profilePhotoPreview} alt="Selected profile photo preview" />
+                            ) : profilePhotoAvailable && !profilePhotoLoading ? (
+                                <img
+                                    src={`${API_BASE_URL}/api/profile-photo?v=${profilePhotoVersion}`}
+                                    alt="Current profile photo"
+                                />
+                            ) : (
+                                <span>{profilePhotoLoading ? "Loading" : "VN"}</span>
+                            )}
+                        </div>
+
+                        <form className="profile-photo-form" onSubmit={handleProfilePhotoUpload}>
+                            <label htmlFor="profile-photo-file">
+                                Profile image (JPG, JPEG, PNG, or WebP; maximum 5 MB)
+                            </label>
+                            <input
+                                id="profile-photo-file"
+                                className="profile-photo-input"
+                                name="photo"
+                                type="file"
+                                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                                onChange={handleProfilePhotoFileChange}
+                            />
+                            <label className="refresh-btn profile-photo-choose" htmlFor="profile-photo-file">
+                                Choose Photo
+                            </label>
+                            {profilePhotoFile && <p>Selected: {profilePhotoFile.name}</p>}
+                            {profilePhotoError && (
+                                <p className="admin-error" role="alert">{profilePhotoError}</p>
+                            )}
+                            {profilePhotoStatus && (
+                                <p className="profile-photo-status" role="status">
+                                    {profilePhotoStatus}
+                                </p>
+                            )}
+                            <div className="profile-photo-actions">
+                                <button
+                                    className="refresh-btn"
+                                    type="submit"
+                                    disabled={uploadingProfilePhoto || !profilePhotoFile}
+                                >
+                                    {uploadingProfilePhoto ? "Uploading..." : "Upload Profile Photo"}
+                                </button>
+                                {profilePhotoAvailable && (
+                                    <button
+                                        className="delete-message-btn"
+                                        type="button"
+                                        onClick={handleProfilePhotoRemove}
+                                        disabled={removingProfilePhoto || uploadingProfilePhoto}
+                                    >
+                                        {removingProfilePhoto ? "Removing..." : "Remove Photo"}
+                                    </button>
+                                )}
+                            </div>
+                        </form>
+                    </div>
+                </section>
 
                 <section className="admin-content" id="projects">
                     <div className="messages-heading">

@@ -473,13 +473,28 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.hero-profile-fallback {
+  width: 145px;
+  height: 145px;
+  display: grid;
+  place-items: center;
+  border: 3px solid #a3e635;
+  border-radius: 50%;
+  background: #151b14;
+  color: var(--green);
+  font-size: 24px;
+  font-weight: 700;
+  box-shadow: 0 0 25px rgba(163, 230, 53, 0.2);
+}
+
 .hero-profile-image:hover {
   transform: scale(1.05);
   box-shadow: 0 0 35px rgba(163, 230, 53, 0.35);
 }
 
 @media (max-width: 768px) {
-  .hero-profile-image {
+  .hero-profile-image,
+  .hero-profile-fallback {
     width: 120px;
     height: 120px;
   }

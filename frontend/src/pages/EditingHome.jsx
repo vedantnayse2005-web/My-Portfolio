@@ -35,8 +35,8 @@ function EditingHero({ profile }) {
         <div className="editing-portrait-frame">
           <span className="editing-portrait-fallback" aria-hidden="true">VN</span>
           <img
-            src={`${API_BASE_URL}/api/profile-photo`}
-            alt="Vedant Nayse"
+            src={`${API_BASE_URL}/api/editing/profile-photo`}
+            alt="Editing portfolio profile"
             onError={(event) => { event.currentTarget.hidden = true; }}
           />
           <span className="editing-portrait-index">01 / FRAME</span>

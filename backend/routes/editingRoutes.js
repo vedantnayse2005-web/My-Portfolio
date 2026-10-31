@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const protectAdmin = require("../middleware/authMiddleware");
 const editing = require("../controllers/editingController");
+const editingProfilePhoto = require("../controllers/editingProfilePhotoController");
 
 const router = express.Router();
 const imageTypes = new Map([
@@ -42,7 +43,44 @@ const uploadThumbnail = (req, res, next) => {
     });
 };
 
+const uploadProfilePhotoFile = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 5 * 1024 * 1024, files: 1 },
+    fileFilter: (req, file, callback) => {
+        const extensions = imageTypes.get(file.mimetype);
+        if (!extensions || !extensions.includes(path.extname(file.originalname).toLowerCase())) {
+            const error = new Error("Upload a JPG, JPEG, PNG, or WebP editing profile photo.");
+            error.code = "INVALID_EDITING_PROFILE_PHOTO_TYPE";
+            return callback(error);
+        }
+        callback(null, true);
+    }
+});
+
+const uploadEditingProfilePhotoFile = (req, res, next) => {
+    uploadProfilePhotoFile.single("photo")(req, res, (error) => {
+        if (!error) return next();
+        if (error instanceof multer.MulterError) {
+            const tooLarge = error.code === "LIMIT_FILE_SIZE";
+            return res.status(tooLarge ? 413 : 400).json({
+                success: false,
+                message: tooLarge ? "Editing profile photos must be 5 MB or smaller." : "Upload one image using the photo field."
+            });
+        }
+        if (error.code === "INVALID_EDITING_PROFILE_PHOTO_TYPE") {
+            return res.status(400).json({ success: false, message: error.message });
+        }
+        console.error("Editing Profile Photo Upload Error:", error.message);
+        return res.status(500).json({ success: false, message: "Unable to process the editing profile photo upload." });
+    });
+};
+
 router.get("/overview", protectAdmin, editing.getEditingOverview);
+
+router.get("/profile-photo", editingProfilePhoto.getEditingProfilePhoto);
+router.get("/profile-photo/admin", protectAdmin, editingProfilePhoto.getEditingProfilePhotoStatus);
+router.post("/profile-photo", protectAdmin, uploadEditingProfilePhotoFile, editingProfilePhoto.uploadEditingProfilePhoto);
+router.delete("/profile-photo", protectAdmin, editingProfilePhoto.removeEditingProfilePhoto);
 
 router.get("/showreel", editing.getPublicShowreel);
 router.get("/showreel/admin", protectAdmin, editing.getAdminShowreel);

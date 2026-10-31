@@ -284,6 +284,54 @@
   color: var(--editing-accent);
 }
 
+.editing-admin .editing-profile-photo {
+  display: grid;
+  grid-template-columns: minmax(160px, 220px) minmax(0, 1fr);
+  align-items: start;
+  gap: 20px;
+}
+
+.editing-admin .editing-profile-photo-preview {
+  display: grid;
+  min-height: 180px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--editing-line);
+  border-radius: 7px;
+  background: var(--editing-card);
+  color: var(--editing-muted);
+}
+
+.editing-admin .editing-profile-photo-preview img {
+  display: block;
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+}
+
+.editing-admin .editing-profile-photo-form {
+  display: grid;
+  gap: 12px;
+  color: #d0d4cc;
+  font-size: 12px;
+}
+
+.editing-admin .editing-profile-photo-form input[type="file"] {
+  max-width: 100%;
+  color: var(--editing-muted);
+  font: inherit;
+}
+
+.editing-admin .editing-profile-photo-form p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.editing-admin .editing-profile-photo-form input:focus-visible {
+  outline: 2px solid var(--editing-accent);
+  outline-offset: 3px;
+}
+
 .editing-admin .editing-admin-form small {
   color: var(--editing-muted);
   font-size: 11px;
@@ -491,6 +539,10 @@
 
 @media (max-width: 420px) {
   .editing-admin .editing-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .editing-admin .editing-profile-photo {
     grid-template-columns: 1fr;
   }
 

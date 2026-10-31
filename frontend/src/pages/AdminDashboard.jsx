@@ -10,6 +10,7 @@ import EditingProjects from "../components/admin/editing/EditingProjects";
 import EditingSkills from "../components/admin/editing/EditingSkills";
 import EditingExperience from "../components/admin/editing/EditingExperience";
 import EditingProfile from "../components/admin/editing/EditingProfile";
+import EditingProfilePhoto from "../components/admin/editing/EditingProfilePhoto";
 import "./AdminDashboard.css";
 
 const getProfilePhotoRequestError = (error, action) => {
@@ -733,7 +734,8 @@ function AdminDashboard() {
                             ["#editing-projects-admin", "Editing Projects", "▣"],
                             ["#editing-skills-admin", "Editing Skills", "◇"],
                             ["#editing-experience-admin", "Editing Experience", "↗"],
-                            ["#editing-profile-admin", "About Me", "◎"]
+                            ["#editing-profile-admin", "About Me", "◎"],
+                            ["#editing-profile-photo-admin", "Editing Profile Photo", "◉"]
                         ].map(([href, label, icon]) => (
                             <a className={activeDashboardSection === href ? "active" : ""} href={href} key={href}>
                                 <span aria-hidden="true">{icon}</span>{label}
@@ -909,6 +911,7 @@ function AdminDashboard() {
                 <EditingSkills />
                 <EditingExperience />
                 <EditingProfile />
+                <EditingProfilePhoto />
 
                 <section className="admin-content" id="projects">
                     <div className="messages-heading">

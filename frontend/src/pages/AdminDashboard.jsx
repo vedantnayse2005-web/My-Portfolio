@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import API_BASE_URL from "../config/api";
 import CertificateManagement from "../components/admin/CertificateManagement";
 import SkillsManagement from "../components/admin/SkillsManagement";
+import AboutManagement from "../components/admin/AboutManagement";
 import EditingOverview from "../components/admin/editing/EditingOverview";
 import EditingShowreel from "../components/admin/editing/EditingShowreel";
 import EditingProjects from "../components/admin/editing/EditingProjects";
@@ -716,6 +717,7 @@ function AdminDashboard() {
                         <span className="admin-nav-group-label">DEVELOPER PORTFOLIO</span>
                         {[
                             ["#overview", "Overview", "⌂"],
+                            ["#about-management", "About Management", "◎"],
                             ["#projects", "Projects", "▤"],
                             ["#skills-management", "Skills", "◇"],
                             ["#certificates", "Certificates", "▧"],
@@ -898,6 +900,7 @@ function AdminDashboard() {
                 </section>
 
                 <CertificateManagement />
+                <AboutManagement />
                 <SkillsManagement />
 
                 <section className="admin-content" id="developer-experience">

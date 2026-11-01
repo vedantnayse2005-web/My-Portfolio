@@ -24,9 +24,6 @@
   line-height: 1.1;
   margin-top: 22px;
   letter-spacing: -2px;
-}
-
-.about-heading h2 span {
   color: #a8ff35;
 }
 
@@ -47,6 +44,16 @@
   line-height: 1.9;
   margin-bottom: 18px;
   max-width: 650px;
+}
+
+.about-biography {
+  white-space: pre-line;
+}
+
+.about-state {
+  color: #999f95;
+  font-size: 16px;
+  line-height: 1.8;
 }
 
 .about-certificates-link {
@@ -83,15 +90,12 @@
   border-bottom: 1px solid #252a20;
 }
 
-.about-detail h3 {
-  font-size: 20px;
-  margin: 12px 0 8px;
-}
-
 .about-detail p {
   color: #999f95;
   font-size: 14px;
   line-height: 1.7;
+  margin-top: 12px;
+  white-space: pre-line;
 }
 
 @media (max-width: 768px) {

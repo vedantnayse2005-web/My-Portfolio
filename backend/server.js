@@ -16,6 +16,7 @@ const profilePhotoRoutes = require("./routes/profilePhotoRoutes");
 const certificateRoutes = require("./routes/certificateRoutes");
 const skillRoutes = require("./routes/skillRoutes");
 const editingRoutes = require("./routes/editingRoutes");
+const aboutRoutes = require("./routes/aboutRoutes");
 
 const protectAdmin = require("./middleware/authMiddleware");
 
@@ -139,6 +140,8 @@ app.use("/api/certificates", certificateRoutes);
 app.use("/api/skills", skillRoutes);
 
 app.use("/api/editing", editingRoutes);
+
+app.use("/api/about", aboutRoutes);
 
 // ========================================
 // ADMIN DASHBOARD

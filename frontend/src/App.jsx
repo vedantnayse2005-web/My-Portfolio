@@ -6,6 +6,7 @@ import {
   Navigate
 } from "react-router-dom";
 
+import { ThemeProvider } from "./context/ThemeProvider";
 import "./App.css";
 
 import About from "./pages/About";
@@ -44,34 +45,36 @@ function Home() {
 // Main application
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
 
-        {/* Portfolio Homepage */}
-        <Route path="/" element={<Home />} />
-        <Route path="/certificates" element={<Certificates />} />
-        <Route path="/editing" element={<EditingHome />} />
+          {/* Portfolio Homepage */}
+          <Route path="/" element={<Home />} />
+          <Route path="/certificates" element={<Certificates />} />
+          <Route path="/editing" element={<EditingHome />} />
 
-        {/* Admin Login */}
-        <Route
-          path="/admin/login"
-          element={<AdminLogin />}
-        />
+          {/* Admin Login */}
+          <Route
+            path="/admin/login"
+            element={<AdminLogin />}
+          />
 
-        {/* Protected Admin Dashboard */}
-        <Route
-          path="/admin/dashboard"
-          element={
-            sessionStorage.getItem("adminToken") ? (
-              <AdminDashboard />
-            ) : (
-              <Navigate to="/admin/login" replace />
-            )
-          }
-        />
+          {/* Protected Admin Dashboard */}
+          <Route
+            path="/admin/dashboard"
+            element={
+              sessionStorage.getItem("adminToken") ? (
+                <AdminDashboard />
+              ) : (
+                <Navigate to="/admin/login" replace />
+              )
+            }
+          />
 
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

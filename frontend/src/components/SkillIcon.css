@@ -7,8 +7,8 @@
 
 .skill-icon-fallback {
   flex-shrink: 0;
-  background: rgba(168, 255, 53, 0.1);
-  color: #a8ff35;
+  background: var(--accent-glow-subtle);
+  color: var(--green);
   font-size: 11px;
   font-weight: 700;
 }

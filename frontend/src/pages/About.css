@@ -1,9 +1,8 @@
-
 .about-section {
   width: min(1600px, 94%);
   margin: 0 auto;
   padding: 130px 0;
-  border-bottom: 1px solid #20251b;
+  border-bottom: 1px solid var(--border-section);
 }
 
 .about-heading {
@@ -13,7 +12,7 @@
 
 .section-label,
 .about-detail > span {
-  color: #a8ff35;
+  color: var(--green);
   font-size: 12px;
   letter-spacing: 2px;
   font-weight: 700;
@@ -24,7 +23,7 @@
   line-height: 1.1;
   margin-top: 22px;
   letter-spacing: -2px;
-  color: #a8ff35;
+  color: var(--green);
 }
 
 .about-content {
@@ -36,10 +35,11 @@
 .about-intro h3 {
   font-size: 24px;
   margin-bottom: 22px;
+  color: var(--text-heading);
 }
 
 .about-intro p {
-  color: #999f95;
+  color: var(--muted);
   font-size: 16px;
   line-height: 1.9;
   margin-bottom: 18px;
@@ -51,7 +51,7 @@
 }
 
 .about-state {
-  color: #999f95;
+  color: var(--muted);
   font-size: 16px;
   line-height: 1.8;
 }
@@ -87,11 +87,11 @@
 
 .about-detail {
   padding-bottom: 24px;
-  border-bottom: 1px solid #252a20;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .about-detail p {
-  color: #999f95;
+  color: var(--muted);
   font-size: 14px;
   line-height: 1.7;
   margin-top: 12px;

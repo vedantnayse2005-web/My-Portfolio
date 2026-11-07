@@ -10,6 +10,15 @@
       content="Vedant Nayse - Computer Science Engineering Student and Developer Portfolio"
     />
     <title>Vedant Nayse | Portfolio</title>
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('portfolio-theme');
+          var theme = saved === 'light' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -14,6 +14,7 @@
   margin-top: 16px;
   font-size: clamp(42px, 6vw, 72px);
   line-height: 1.05;
+  color: var(--text-heading);
 }
 
 .certificates-heading h1 span {
@@ -42,11 +43,12 @@
 
 .certificate-filters button {
   padding: 9px 13px;
-  border: 1px solid #30392b;
+  border: 1px solid var(--border-tag);
   border-radius: 5px;
-  background: transparent;
-  color: #b7beb2;
+  background: var(--surface-card);
+  color: var(--text-secondary);
   cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
 }
 
 .certificate-filters button.active,
@@ -64,10 +66,11 @@
 .certificate-card {
   min-width: 0;
   overflow: hidden;
-  border: 1px solid #252d20;
+  border: 1px solid var(--border-subtle);
   border-radius: 8px;
-  background: #0d110d;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  background: var(--surface-card);
+  box-shadow: var(--card-shadow);
+  transition: border-color 0.2s ease, transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .certificate-card:hover {
@@ -77,8 +80,8 @@
 
 .certificate-preview {
   height: 220px;
-  background: #111;
-  border-bottom: 1px solid #252d20;
+  background: var(--surface-card-hover);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .certificate-preview iframe,
@@ -103,6 +106,7 @@
   margin-top: 12px;
   font-size: 20px;
   line-height: 1.35;
+  color: var(--text-heading);
 }
 
 .certificate-issuer,
@@ -117,7 +121,7 @@
 }
 
 .certificate-credential span {
-  color: #dce8d6;
+  color: var(--text);
 }
 
 .certificate-view-link {

@@ -1,9 +1,8 @@
-
 .skills-section {
   width: min(1600px, 94%);
   margin: 0 auto;
   padding: 130px 0;
-  border-bottom: 1px solid #20251b;
+  border-bottom: 1px solid var(--border-section);
 }
 
 .skills-heading {
@@ -16,14 +15,15 @@
   line-height: 1.1;
   margin-top: 22px;
   letter-spacing: -2px;
+  color: var(--text-heading);
 }
 
 .skills-heading h2 span {
-  color: #a8ff35;
+  color: var(--green);
 }
 
 .skills-heading p {
-  color: #999f95;
+  color: var(--muted);
   font-size: 16px;
   line-height: 1.8;
   margin-top: 22px;
@@ -36,23 +36,25 @@
 }
 
 .skill-card {
-  background: #0d110d;
-  border: 1px solid #252d20;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
   padding: 30px;
   min-height: 210px;
-  transition: border-color 0.3s ease, transform 0.3s ease;
+  box-shadow: var(--card-shadow);
+  transition: border-color 0.3s ease, transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .skill-card:hover {
-  border-color: #a8ff35;
+  border-color: var(--green);
   transform: translateY(-5px);
+  box-shadow: 0 12px 36px var(--accent-glow-subtle);
 }
 
 .skill-card-top {
   display: flex;
   justify-content: space-between;
-  color: #a8ff35;
+  color: var(--green);
   font-size: 13px;
   margin-bottom: 35px;
 }
@@ -64,6 +66,7 @@
 .skill-card h3 {
   font-size: 20px;
   margin-bottom: 22px;
+  color: var(--text-heading);
 }
 
 .skill-tags {
@@ -77,10 +80,12 @@
   align-items: center;
   gap: 7px;
   padding: 8px 13px;
-  border: 1px solid #30392b;
+  border: 1px solid var(--border-tag);
   border-radius: 5px;
-  color: #b7beb2;
+  background: var(--surface-card);
+  color: var(--text-secondary);
   font-size: 13px;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
 
 .skill-tag-icon {
@@ -91,19 +96,19 @@
 }
 
 .skill-order {
-  color: #a8ff35;
+  color: var(--green);
   font-variant-numeric: tabular-nums;
   font-size: 11px;
 }
 
 .skill-tag small {
-  color: #a8ff35;
+  color: var(--green);
   font-size: 10px;
 }
 
 .skills-feedback {
   margin-top: 24px;
-  color: #999f95;
+  color: var(--muted);
 }
 
 .skills-error {

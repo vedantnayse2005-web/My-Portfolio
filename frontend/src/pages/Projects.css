@@ -1,9 +1,8 @@
-
 .projects-section {
   width: min(1600px, 94%);
   margin: 0 auto;
   padding: 130px 0;
-  border-bottom: 1px solid #20251b;
+  border-bottom: 1px solid var(--border-section);
 }
 
 .projects-heading {
@@ -16,14 +15,15 @@
   line-height: 1.1;
   margin-top: 22px;
   letter-spacing: -2px;
+  color: var(--text-heading);
 }
 
 .projects-heading h2 span {
-  color: #a8ff35;
+  color: var(--green);
 }
 
 .projects-heading p {
-  color: #999f95;
+  color: var(--muted);
   font-size: 16px;
   line-height: 1.8;
   margin-top: 22px;
@@ -40,10 +40,11 @@
   flex-direction: column;
   min-height: 390px;
   padding: 30px;
-  background: #0d110d;
-  border: 1px solid #252d20;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
-  transition: 0.3s ease;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.3s ease, border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .project-image {
@@ -56,13 +57,14 @@
 
 .project-card:hover {
   transform: translateY(-6px);
-  border-color: #a8ff35;
+  border-color: var(--green);
+  box-shadow: 0 14px 40px var(--accent-glow-subtle);
 }
 
 .project-top {
   display: flex;
   justify-content: space-between;
-  color: #a8ff35;
+  color: var(--green);
   font-size: 12px;
   margin-bottom: 38px;
 }
@@ -72,7 +74,7 @@
 }
 
 .project-category {
-  color: #a8ff35;
+  color: var(--green);
   font-size: 11px;
   letter-spacing: 1.5px;
   margin-bottom: 14px;
@@ -81,10 +83,11 @@
 .project-card h3 {
   font-size: 27px;
   margin-bottom: 15px;
+  color: var(--text-heading);
 }
 
 .project-description {
-  color: #999f95;
+  color: var(--muted);
   font-size: 14px;
   line-height: 1.8;
   margin-bottom: 25px;
@@ -99,10 +102,12 @@
 
 .project-tags span {
   padding: 7px 11px;
-  border: 1px solid #30392b;
+  border: 1px solid var(--border-tag);
   border-radius: 5px;
-  color: #b7beb2;
+  color: var(--text-secondary);
+  background: var(--surface-card);
   font-size: 12px;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
 
 .project-links {
@@ -110,11 +115,11 @@
   gap: 22px;
   margin-top: auto;
   padding-top: 20px;
-  border-top: 1px solid #252d20;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .project-links a {
-  color: #a8ff35;
+  color: var(--green);
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
@@ -122,11 +127,11 @@
 }
 
 .project-links a:hover {
-  color: white;
+  color: var(--text-heading);
 }
 
 .projects-status {
-  color: #999f95;
+  color: var(--muted);
   line-height: 1.8;
 }
 
